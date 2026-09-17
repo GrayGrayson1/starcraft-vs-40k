@@ -1,0 +1,832 @@
+<meta charset="utf-8">
+<title>Convergence Databank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Cinzel:wght@500;600&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#0E1114; --surf:#161A20; --surf2:#1C222A; --surf3:#232A34; --line:#2C343E; --line2:#3A4450;
+  --ink:#E6EBF0; --ink2:#A2AEBA; --ink3:#6E7A87;
+  --kop:#3D96D6; --m41:#D25436;
+  --kop-soft:rgba(61,150,214,.16); --m41-soft:rgba(210,84,54,.16);
+  --terran:#4FA8E8; --zerg:#B06BE0; --protoss:#E2B24A;
+  --good:#4FA86B; --warn:#D9A038;
+  --grid:rgba(255,255,255,.06);
+  --shadow:0 1px 0 rgba(255,255,255,.03), 0 8px 24px rgba(0,0,0,.4);
+  --sans:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --disp:"Chakra Petch","Barlow",system-ui,sans-serif;
+  --imp:"Cinzel","Barlow",Georgia,serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --maxw:1220px;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#EFEDE6; --surf:#FAF9F4; --surf2:#E9E6DC; --surf3:#E2DED1; --line:#D6D1C2; --line2:#C3BCA9;
+    --ink:#191B18; --ink2:#4C4F47; --ink3:#797D71;
+    --kop:#2A7FB8; --m41:#BF4128;
+    --kop-soft:rgba(42,127,184,.12); --m41-soft:rgba(191,65,40,.12);
+    --terran:#2A7FB8; --zerg:#7B3FAF; --protoss:#9A7212;
+    --good:#2E7A48; --warn:#8A6410;
+    --grid:rgba(0,0,0,.07);
+    --shadow:0 1px 0 rgba(255,255,255,.6), 0 6px 18px rgba(60,55,40,.10);
+  }
+}
+:root[data-theme="light"]{
+  --bg:#EFEDE6; --surf:#FAF9F4; --surf2:#E9E6DC; --surf3:#E2DED1; --line:#D6D1C2; --line2:#C3BCA9;
+  --ink:#191B18; --ink2:#4C4F47; --ink3:#797D71;
+  --kop:#2A7FB8; --m41:#BF4128;
+  --kop-soft:rgba(42,127,184,.12); --m41-soft:rgba(191,65,40,.12);
+  --terran:#2A7FB8; --zerg:#7B3FAF; --protoss:#9A7212;
+  --good:#2E7A48; --warn:#8A6410;
+  --grid:rgba(0,0,0,.07);
+  --shadow:0 1px 0 rgba(255,255,255,.6), 0 6px 18px rgba(60,55,40,.10);
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+.wrap{max-width:var(--maxw);margin:0 auto;padding-inline:20px}
+h1,h2,h3,h4{margin:0;text-wrap:balance;font-family:var(--disp);font-weight:700;letter-spacing:-.01em;line-height:1.14}
+p{margin:0}
+a{color:var(--kop)}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:2px solid var(--kop);outline-offset:2px;border-radius:3px}
+
+/* ---------- top bar ---------- */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:60;background:color-mix(in srgb,var(--bg) 88%,transparent);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar-in{max-width:var(--maxw);margin:0 auto;padding:9px 20px;display:flex;align-items:center;gap:18px}
+.mark{font-family:var(--disp);font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+.mark span{color:var(--m41)}
+.navlinks{display:flex;gap:16px;margin-left:auto;flex-wrap:wrap}
+.navlinks a{font-family:var(--disp);font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink3);text-decoration:none}
+.navlinks a:hover{color:var(--ink)}
+.tgl{border:1px solid var(--line2);border-radius:999px;padding:4px 11px;font-family:var(--disp);font-size:11px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink2)}
+.tgl:hover{color:var(--ink);border-color:var(--ink3)}
+@media(max-width:720px){.navlinks a:nth-child(n+4){display:none}}
+
+/* ---------- hero ---------- */
+.hero{position:relative;border-bottom:1px solid var(--line);overflow:hidden}
+#stars{position:absolute;inset:0;width:100%;height:100%;opacity:.5}
+:root[data-theme="light"] #stars,
+:root:not([data-theme="dark"]) #stars{opacity:.22}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) #stars{opacity:.5}}
+.hero-in{position:relative;padding-block:62px 44px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink3);margin-bottom:16px}
+h1{font-size:clamp(38px,7.4vw,74px);letter-spacing:-.025em;line-height:.98;text-transform:uppercase}
+h1 .a{color:var(--kop)} h1 .b{color:var(--m41);font-family:var(--imp);text-transform:none;letter-spacing:-.005em}
+.lede{margin-top:20px;max-width:63ch;font-size:clamp(16px,1.9vw,19px);color:var(--ink2)}
+.lede b{color:var(--ink);font-weight:600}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:34px;background:var(--line);
+  border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.tile{background:var(--surf);padding:15px 16px}
+.tile .n{font-family:var(--disp);font-size:clamp(26px,4.4vw,38px);font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.tile .l{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);margin-top:7px;line-height:1.4}
+@media(max-width:640px){.tiles{grid-template-columns:repeat(2,1fr)}}
+
+/* ---------- generic section ---------- */
+section{padding-block:62px;border-bottom:1px solid var(--line)}
+.shead{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+.snum{font-family:var(--mono);font-size:11px;color:var(--m41);letter-spacing:.14em}
+h2{font-size:clamp(23px,3.4vw,33px);text-transform:uppercase;letter-spacing:.005em}
+.sub{color:var(--ink2);max-width:70ch;margin-top:10px;margin-bottom:30px}
+
+/* ---------- faction primer ---------- */
+.prim{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:860px){.prim{grid-template-columns:1fr}}
+.pcard{background:var(--surf);border:1px solid var(--line);border-radius:5px;overflow:hidden;display:flex;flex-direction:column}
+.pcard .rail{height:3px;background:var(--acc)}
+.pcard .in{padding:18px 18px 20px}
+.pnames{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.pn1{font-family:var(--disp);font-weight:700;font-size:18px;color:var(--acc);text-transform:uppercase;letter-spacing:.02em}
+.pn2{font-family:var(--imp);font-weight:600;font-size:16.5px;color:var(--m41)}
+.arrow{color:var(--ink3);font-family:var(--mono);font-size:13px}
+.pcard p{font-size:14.5px;color:var(--ink2);margin-top:11px}
+.ptrait{margin-top:14px;display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;padding:3px 8px;
+  border:1px solid var(--line2);border-radius:3px;color:var(--ink2)}
+
+.note{margin-top:26px;background:var(--surf);border:1px solid var(--line);border-left:3px solid var(--m41);
+  border-radius:4px;padding:18px 20px}
+.note h4{font-size:13px;letter-spacing:.11em;text-transform:uppercase;color:var(--m41);margin-bottom:9px;font-family:var(--disp)}
+.note p{font-size:14.5px;color:var(--ink2);max-width:80ch}
+.note p+p{margin-top:10px}
+
+/* ---------- databank ---------- */
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:22px}
+.seg{display:flex;border:1px solid var(--line2);border-radius:4px;overflow:hidden}
+.seg button{padding:7px 14px;font-family:var(--disp);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink3);border-right:1px solid var(--line2)}
+.seg button:last-child{border-right:none}
+.seg button[aria-pressed="true"]{background:var(--surf3);color:var(--ink)}
+.seg button:hover{color:var(--ink)}
+input[type="search"]{background:var(--surf);border:1px solid var(--line2);border-radius:4px;padding:7px 12px;
+  color:var(--ink);font-family:var(--sans);font-size:14px;min-width:210px;flex:1;max-width:320px}
+input[type="search"]::placeholder{color:var(--ink3)}
+.count{font-family:var(--mono);font-size:11px;color:var(--ink3);letter-spacing:.09em;margin-left:auto}
+
+/* detail panel */
+.detail{background:var(--surf);border:1px solid var(--line);border-radius:6px;overflow:hidden;margin-bottom:26px;box-shadow:var(--shadow)}
+.dtop{display:grid;grid-template-columns:1fr auto 1fr;gap:0;border-bottom:1px solid var(--line)}
+.dside{padding:20px 22px}
+.dside.k{background:linear-gradient(180deg,var(--kop-soft),transparent 80%)}
+.dside.m{background:linear-gradient(180deg,var(--m41-soft),transparent 80%);text-align:right}
+.dlbl{font-family:var(--mono);font-size:10px;letter-spacing:.17em;text-transform:uppercase;color:var(--ink3)}
+.dname{font-family:var(--disp);font-weight:700;font-size:clamp(20px,3vw,29px);line-height:1.1;margin-top:7px;color:var(--kop);text-transform:uppercase;letter-spacing:-.01em}
+.dside.m .dname{font-family:var(--imp);color:var(--m41);text-transform:none;font-weight:600;letter-spacing:0}
+.dmeta{font-size:13px;color:var(--ink2);margin-top:6px}
+.dvs{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 8px;
+  border-left:1px solid var(--line);border-right:1px solid var(--line);background:var(--surf2);min-width:124px}
+.ring{position:relative;width:76px;height:76px}
+.ring svg{transform:rotate(-90deg)}
+.ring .v{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--disp);font-weight:700;font-size:23px;font-variant-numeric:tabular-nums}
+.ringlbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);margin-top:8px;text-align:center;line-height:1.5}
+@media(max-width:760px){
+  .dtop{grid-template-columns:1fr}
+  .dside.m{text-align:left}
+  .dvs{border-left:none;border-right:none;border-top:1px solid var(--line);border-bottom:1px solid var(--line);flex-direction:row;gap:14px;padding:12px}
+  .ringlbl{margin-top:0;text-align:left}
+}
+.dbody{padding:22px}
+.verdict{font-family:var(--disp);font-size:clamp(17px,2.4vw,21px);font-weight:600;line-height:1.35;color:var(--ink);
+  border-left:3px solid var(--protoss);padding-left:14px;margin-bottom:18px}
+.prose p{color:var(--ink2);font-size:15.5px;max-width:74ch}
+.prose p+p{margin-top:13px}
+
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:26px}
+@media(max-width:860px){.cols{grid-template-columns:1fr}}
+.blk h4{font-family:var(--disp);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);
+  padding-bottom:8px;border-bottom:1px solid var(--line);margin-bottom:12px}
+ul.pts{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px}
+ul.pts li{position:relative;padding-left:20px;font-size:14.5px;color:var(--ink2)}
+ul.pts li::before{content:"";position:absolute;left:2px;top:9px;width:7px;height:7px;border-radius:1px;transform:rotate(45deg)}
+.conv li::before{background:var(--kop)}
+.divg li::before{background:var(--m41)}
+
+/* stat tables */
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:26px}
+@media(max-width:860px){.stats{grid-template-columns:1fr}}
+.tbox{border:1px solid var(--line);border-radius:5px;overflow:hidden;background:var(--surf2)}
+.thead{padding:9px 13px;font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;
+  border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:center}
+.thead.k{color:var(--kop);background:var(--kop-soft)}
+.thead.m{color:var(--m41);background:var(--m41-soft)}
+.gridstats{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:1px;background:var(--line)}
+.gs{background:var(--surf);padding:9px 10px}
+.gs .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
+.gs .v{font-family:var(--mono);font-weight:600;font-size:15px;margin-top:3px;font-variant-numeric:tabular-nums}
+.wtbl{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11.5px}
+.wtbl th{text-align:left;font-weight:400;color:var(--ink3);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+  padding:7px 9px;border-bottom:1px solid var(--line);white-space:nowrap}
+.wtbl td{padding:6px 9px;border-bottom:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.wtbl tr:last-child td{border-bottom:none}
+.wtbl td:first-child{color:var(--ink);max-width:190px;font-family:var(--sans);font-size:12.5px}
+.wscroll{overflow-x:auto}
+.attrs{padding:9px 13px;font-family:var(--mono);font-size:10.5px;color:var(--ink3);border-top:1px solid var(--line);letter-spacing:.06em}
+
+/* chart */
+.chartbox{margin-top:26px;border:1px solid var(--line);border-radius:5px;background:var(--surf2);padding:16px 18px 12px}
+.ctitle{font-family:var(--disp);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink)}
+.cnote{font-size:12.5px;color:var(--ink3);margin-top:5px;max-width:78ch}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px}
+.lg{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2)}
+.sw{width:12px;height:12px;border-radius:2px}
+.prow{margin-top:13px}
+.plabel{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px;display:flex;justify-content:space-between}
+.ptrack{position:relative;height:13px;background:var(--surf3);border-radius:2px;margin-bottom:3px;overflow:hidden}
+.pfill{position:absolute;left:0;top:0;bottom:0;border-radius:0 3px 3px 0;width:0;transition:width .7s cubic-bezier(.22,1,.36,1)}
+.pval{position:absolute;right:6px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:9.5px;color:var(--ink);opacity:.9}
+.pnd{font-family:var(--mono);font-size:9.5px;color:var(--ink3);padding-left:7px;line-height:13px}
+.ticks{position:relative;height:12px;margin-top:2px}
+.ticks i{position:absolute;top:0;font-family:var(--mono);font-size:9px;color:var(--ink3);transform:translateX(-50%);font-style:normal}
+
+/* score breakdown */
+.sbreak{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:24px}
+@media(max-width:640px){.sbreak{grid-template-columns:repeat(2,1fr)}}
+.sb .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);display:flex;justify-content:space-between}
+.sb .t{height:5px;background:var(--surf3);border-radius:3px;margin-top:6px;overflow:hidden}
+.sb .t i{display:block;height:100%;background:var(--protoss);width:0;transition:width .7s cubic-bezier(.22,1,.36,1)}
+
+.factline{margin-top:24px;padding:14px 16px;background:var(--surf2);border:1px solid var(--line);border-radius:4px;
+  font-size:14.5px;color:var(--ink2)}
+.factline b{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--protoss);
+  display:block;margin-bottom:6px;font-weight:600}
+
+/* card grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:12px}
+.card{background:var(--surf);border:1px solid var(--line);border-radius:5px;padding:13px 14px;text-align:left;
+  display:flex;flex-direction:column;gap:7px;transition:transform .16s ease,border-color .16s ease,background .16s ease;position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--acc)}
+.card:hover{transform:translateY(-2px);border-color:var(--line2);background:var(--surf2)}
+.card[aria-current="true"]{border-color:var(--kop);background:var(--surf2)}
+.ctier{font-family:var(--mono);font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);display:flex;justify-content:space-between;gap:8px}
+.cscore{color:var(--protoss);font-weight:600}
+.cn1{font-family:var(--disp);font-weight:600;font-size:15.5px;color:var(--ink);line-height:1.2}
+.cn2{font-family:var(--imp);font-size:13.5px;color:var(--m41);line-height:1.25}
+.cvs{font-family:var(--mono);font-size:9.5px;color:var(--ink3);letter-spacing:.1em}
+
+/* ranked chart */
+.rank{margin-top:6px}
+.rrow{display:grid;grid-template-columns:minmax(120px,190px) 1fr 34px;gap:10px;align-items:center;padding:2px 0;
+  border-radius:3px;cursor:pointer;text-align:left;width:100%}
+.rrow:hover{background:var(--surf2)}
+.rname{font-size:12.5px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rtrack{height:10px;background:var(--surf3);border-radius:2px;overflow:hidden}
+.rfill{height:100%;width:0;border-radius:0 2px 2px 0;transition:width .8s cubic-bezier(.22,1,.36,1)}
+.rval{font-family:var(--mono);font-size:11px;color:var(--ink3);text-align:right;font-variant-numeric:tabular-nums}
+
+/* scatter + strip */
+.facets{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+@media(max-width:820px){.facets{grid-template-columns:1fr}}
+.facet{border:1px solid var(--line);border-radius:5px;background:var(--surf2);padding:12px}
+.ftitle{font-family:var(--disp);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+svg{display:block;max-width:100%}
+.ax{stroke:var(--line2);stroke-width:1}
+.gl{stroke:var(--grid);stroke-width:1}
+.atx{fill:var(--ink3);font-family:var(--mono);font-size:9px}
+.dot{transition:r .15s ease}
+
+/* systems + orphans */
+.sysgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(max-width:820px){.sysgrid{grid-template-columns:1fr}}
+.sys{border:1px solid var(--line);border-radius:5px;background:var(--surf);padding:16px 18px}
+.sys h3{font-family:var(--disp);font-size:15.5px;margin-bottom:12px;letter-spacing:.01em}
+.sysrow{display:grid;grid-template-columns:auto 1fr;gap:12px;font-size:14px;color:var(--ink2);margin-bottom:9px}
+.tag{font-family:var(--mono);font-size:9px;letter-spacing:.11em;text-transform:uppercase;padding:2px 6px;height:fit-content;
+  border-radius:3px;white-space:nowrap}
+.tag.k{color:var(--kop);background:var(--kop-soft)}
+.tag.m{color:var(--m41);background:var(--m41-soft)}
+.sysnote{font-size:13.5px;color:var(--ink);border-top:1px solid var(--line);padding-top:10px;margin-top:4px}
+.orph{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.orphcard{border:1px dashed var(--line2);border-radius:5px;padding:15px 16px;background:var(--surf)}
+.orphcard h4{font-family:var(--disp);font-size:15px;margin-bottom:4px}
+.orphcard .f{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px}
+.orphcard p{font-size:14px;color:var(--ink2)}
+
+/* method */
+.method{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+@media(max-width:820px){.method{grid-template-columns:1fr}}
+.method h3{font-family:var(--disp);font-size:14px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink3);margin-bottom:12px}
+.method p,.method li{font-size:14px;color:var(--ink2)}
+.method ol{padding-left:18px;margin:0;display:flex;flex-direction:column;gap:8px}
+.srcs{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px}
+.srcs li{font-size:13.5px;color:var(--ink2);padding-bottom:9px;border-bottom:1px solid var(--line)}
+.srcs a{text-decoration:none;border-bottom:1px solid var(--line2)}
+.srcs a:hover{border-color:var(--kop)}
+footer{padding-block:34px 44px;color:var(--ink3);font-size:13px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+#tip{position:fixed;z-index:90;pointer-events:none;opacity:0;transition:opacity .12s ease;background:var(--surf3);
+  border:1px solid var(--line2);border-radius:4px;padding:7px 10px;font-family:var(--mono);font-size:11px;
+  color:var(--ink);box-shadow:var(--shadow);max-width:260px;line-height:1.5}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001ms!important;transition-duration:.001ms!important}
+}
+</style>
+
+<header class="bar">
+  <div class="bar-in">
+    <div class="mark">Convergence <span>Databank</span></div>
+    <nav class="navlinks">
+      <a href="#primer">Factions</a><a href="#databank">Databank</a><a href="#ranked">Rankings</a>
+      <a href="#systems">Systems</a><a href="#orphans">No Match</a><a href="#method">Method</a>
+    </nav>
+    <button class="tgl" id="theme" aria-label="Switch colour theme">Theme</button>
+  </div>
+</header>
+
+<div class="hero">
+  <canvas id="stars" aria-hidden="true"></canvas>
+  <div class="wrap hero-in">
+    <div class="eyebrow">Cross-franchise comparative analysis · Koprulu Sector ⟷ 41st Millennium</div>
+    <h1><span class="a">StarCraft</span> vs<br><span class="b">Warhammer 40,000</span></h1>
+    <p class="lede">Thirty-six like-for-like pairings, built from <b>real numbers</b>: StarCraft II unit stats pulled
+      straight from the game's own data files, and Warhammer 40,000 datasheets read off current 10th-edition profiles.
+      No invented statistics — where a value doesn't exist in the source, this page says so.</p>
+    <div class="tiles">
+      <div class="tile"><div class="n" data-count="36">0</div><div class="l">Unit pairings</div></div>
+      <div class="tile"><div class="n" data-count="56">0</div><div class="l">SC2 units<br>from game files</div></div>
+      <div class="tile"><div class="n" data-count="54">0</div><div class="l">10th-edition<br>datasheets</div></div>
+      <div class="tile"><div class="n" data-count="8">0</div><div class="l">Things with<br>no counterpart</div></div>
+    </div>
+  </div>
+</div>
+
+<section id="primer">
+  <div class="wrap">
+    <div class="shead"><span class="snum">01</span><h2>Three Wars, Two Universes</h2></div>
+    <p class="sub">Both settings run three-way wars between a human military empire, a devouring biological swarm and an
+      ancient psychic civilisation in decline. The mapping below is the frame for everything that follows.</p>
+    <div class="prim" id="prim"></div>
+    <div class="note">
+      <h4>The thing everyone repeats — and what actually happened</h4>
+      <p>The story that <i>StarCraft</i> began life as a licensed Warhammer 40,000 game is folklore. The licensing
+        conversation was real, but it was about <b>Warcraft</b>, not StarCraft. Blizzard co-founder Allen Adham pursued a
+        Warhammer licence for the first Warcraft; producer Patrick Wyatt's own account says it died from
+        "a lack of traction on business terms and a fervent desire on the part of virtually everyone else on the
+        development team … to control our own universe."</p>
+      <p>What did happen to StarCraft is more interesting. Its 1996 E3 build — running on the Warcraft II engine — was
+        dismissed as "orcs in space," and Blizzard threw the engine out and rebuilt the game over roughly two more years
+        before its 1998 release. The resemblances collected on this page are mostly <b>convergent design</b>: two teams
+        solving the same problems — a horde, an elite, a line infantryman, an artillery piece — and arriving at the
+        same answers.</p>
+    </div>
+  </div>
+</section>
+
+<section id="databank">
+  <div class="wrap">
+    <div class="shead"><span class="snum">02</span><h2>The Databank</h2></div>
+    <p class="sub">Pick any pairing. Each dossier carries the analysis, the raw stat block from both games, and a
+      like-for-like profile chart built from ranks rather than raw numbers.</p>
+    <div class="filters">
+      <div class="seg" id="raceseg" role="group" aria-label="Filter by race">
+        <button data-r="all" aria-pressed="true">All</button>
+        <button data-r="terran" aria-pressed="false">Terran</button>
+        <button data-r="zerg" aria-pressed="false">Zerg</button>
+        <button data-r="protoss" aria-pressed="false">Protoss</button>
+      </div>
+      <div class="seg" id="sortseg" role="group" aria-label="Sort order">
+        <button data-s="order" aria-pressed="true">Army order</button>
+        <button data-s="score" aria-pressed="false">Closest first</button>
+      </div>
+      <input type="search" id="q" placeholder="Search units, e.g. hydralisk, farseer…" aria-label="Search pairings">
+      <div class="count" id="count"></div>
+    </div>
+    <div class="detail" id="detail"></div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<section id="ranked">
+  <div class="wrap">
+    <div class="shead"><span class="snum">03</span><h2>How Close Is Close?</h2></div>
+    <p class="sub">Every pairing scored against the same four-part rubric — battlefield role, physical form, doctrinal
+      rationale and mechanical behaviour, 25 points each. This is the one genuinely editorial number on the page, and the
+      breakdown is shown on every dossier so you can argue with it. Click a bar to open that pairing.</p>
+    <div class="chartbox"><div class="ctitle">Convergence score — all 36 pairings</div>
+      <div class="cnote">Higher means the two units are closer in role, form, rationale and rules behaviour.</div>
+      <div class="legend">
+        <div class="lg"><span class="sw" style="background:var(--terran)"></span>Terran ⟷ Imperium</div>
+        <div class="lg"><span class="sw" style="background:var(--zerg)"></span>Zerg ⟷ Tyranids</div>
+        <div class="lg"><span class="sw" style="background:var(--protoss)"></span>Protoss ⟷ Aeldari</div>
+      </div>
+      <div class="rank" id="rank"></div>
+    </div>
+  </div>
+</section>
+
+<section id="scale">
+  <div class="wrap">
+    <div class="shead"><span class="snum">04</span><h2>Two Ways To Measure An Army</h2></div>
+    <p class="sub">The games do not share a single unit of measurement, so these charts stay inside their own universe.
+      On the left, what a StarCraft unit costs in supply against how much damage it can absorb. On the right, the one
+      physical measurement Warhammer publishes for every model: the diameter of the base it stands on.</p>
+    <div class="facets" id="facets"></div>
+    <div class="chartbox" style="margin-top:22px">
+      <div class="ctitle">Model footprint — 47 datasheets by base diameter</div>
+      <div class="cnote">Round bases shown as printed; oval bases converted to the diameter of a circle of equal area.
+        This is the closest thing 40K has to a published size for its creatures. Hover any dot.</div>
+      <div id="strip"></div>
+    </div>
+  </div>
+</section>
+
+<section id="systems">
+  <div class="wrap">
+    <div class="shead"><span class="snum">05</span><h2>Systems, Not Units</h2></div>
+    <p class="sub">The strongest parallels aren't models at all — they're rules. These six pairs are where the two games
+      independently reached the same structural conclusion.</p>
+    <div class="sysgrid" id="sysgrid"></div>
+  </div>
+</section>
+
+<section id="orphans">
+  <div class="wrap">
+    <div class="shead"><span class="snum">06</span><h2>No Counterpart Exists</h2></div>
+    <p class="sub">An honest comparison has to include what doesn't map. These eight have no meaningful opposite number
+      in the other universe, and the gaps say as much as the matches do.</p>
+    <div class="orph" id="orph"></div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="wrap">
+    <div class="shead"><span class="snum">07</span><h2>Method &amp; Sources</h2></div>
+    <div class="method">
+      <div>
+        <h3>How the numbers were made</h3>
+        <ol>
+          <li><b>StarCraft II stats</b> are extracted from the game's own balance data — health, shields, armour, supply,
+            cost, build time, movement speed, sight, attack damage, cooldown and range. Damage per second is
+            damage × attacks ÷ cooldown. Nothing is hand-entered.</li>
+          <li><b>Warhammer 40,000 stats</b> are read from current 10th-edition datasheets: Movement, Toughness, Save,
+            Wounds, Leadership, Objective Control, weapon range, attacks, skill, Strength, AP and Damage, plus the
+            published base size.</li>
+          <li><b>The profile chart</b> shows each unit's <i>percentile rank inside its own game's roster</i> — not raw
+            values. A 40K Wound and a StarCraft hit point are not the same thing and are never plotted on one scale.
+            Durability is HP + shields on one side, Wounds × Toughness on the other; damage volume is DPS against
+            expected attacks × damage; reach, mobility and footprint use each game's own units.</li>
+          <li><b>Where a value doesn't exist</b> — a StarCraft attack driven by an ability rather than a weapon, a 40K
+            vehicle with no base size — the chart prints "no data in source" instead of a zero.</li>
+          <li><b>The convergence score</b> is editorial judgement, scored on a fixed four-part rubric and always shown
+            broken down. It is the only subjective number here.</li>
+        </ol>
+      </div>
+      <div>
+        <h3>Sources</h3>
+        <ul class="srcs">
+          <li><a href="https://github.com/BurnySc2/sc2-techtree" target="_blank" rel="noopener">sc2-techtree</a> — unit,
+            weapon and upgrade data extracted directly from StarCraft II's game files.</li>
+          <li><a href="https://wahapedia.ru/wh40k10ed/the-rules/core-rules/" target="_blank" rel="noopener">Wahapedia</a>
+            — complete 10th-edition datasheets, weapon profiles, keywords and base sizes.</li>
+          <li><a href="https://starcraft.fandom.com/" target="_blank" rel="noopener">StarCraft Wiki</a> — unit lore:
+            CMC suit marks, the C-14 Impaler, the 5-4 Armored Infantry Suit, Crucio calibres, Slothien and brontolith
+            origins, Dragoon interment.</li>
+          <li><a href="https://warhammer40k.fandom.com/" target="_blank" rel="noopener">Warhammer 40k Wiki</a> — Ogryn,
+            Vindicare, Carnifex, Wraithguard, Tyranid Warrior and Avatar background.</li>
+          <li><a href="https://www.codeofhonor.com/blog/the-making-of-warcraft-part-1" target="_blank" rel="noopener">Patrick
+            Wyatt, "The Making of Warcraft"</a> and <a href="https://www.codeofhonor.com/blog/starcraft-orcs-in-space-go-down-in-flames/" target="_blank" rel="noopener">"Orcs in space go down in flames"</a>
+            — first-hand accounts of the Warhammer licence talks and StarCraft's 1996 reboot.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap">
+  <div>An unofficial fan comparison. StarCraft © Blizzard Entertainment. Warhammer 40,000 © Games Workshop.</div>
+  <div>Stat blocks reflect StarCraft II (Legacy of the Void) and Warhammer 40,000 10th edition.</div>
+</div></footer>
+<div id="tip" role="status"></div>
+
+<script>window.DB={"matchups":[{"id":"scv-enginseer","race":"terran","tier":"Labour","scName":"SCV","whName":"Tech-Priest Enginseer","whFac":"Astra Militarum","verdict":"Same wrench, opposite theology.","body":["Both armies field exactly one model whose job is to make broken machines work again, and both do it with a handheld cutting tool at arm's length. The SCV's fusion cutter welds hull plate under fire; the Enginseer's servo-arm and Omnissian axe do the same work while he recites the Rite of Awakening.","The gap is what the tool means. To the Dominion an SCV is depreciating capital \u2014 50 minerals, no ceremony. To the Adeptus Mechanicus the machine is divine, the repair is a sacrament, and the mechanic outranks most of the soldiers he is patching up."],"conv":["The only unit in either army that restores lost durability to a *mechanical* model rather than a living one","Both work at melee range with an industrial tool, and both are terrible in an actual fight","Both are more valuable than their combat stats suggest, because everything else depends on them"],"div":["The SCV also mines the economy that funds the war. Warhammer 40,000 has no resource-gathering layer at all \u2014 nothing on the table produces anything","An SCV builds structures by standing next to them; wargear in 40K is issued, never manufactured on the battlefield"],"fact":"StarCraft's three workers are the game's real subject: every build order is an argument about how many of them to make. 40K deletes that entire axis and starts both armies fully funded.","score":{"role":19,"form":14,"doctrine":21,"mech":12},"total":66,"sc":{"key":"SCV","hp":45.0,"sh":0,"ar":0.0,"sup":1.0,"min":50,"gas":0,"bt":12.1,"sp":2.8125,"si":8.0,"rad":0.375,"attr":["Light","Biological","Mechanical"],"fly":false,"w":[{"t":"Ground","d":5.0,"a":1,"cd":1.5,"r":0.199951171875,"dps":3.33,"b":[]}],"p":{"dur":8.2,"fire":9.5,"reach":10.8,"mob":67.3,"foot":10.0},"m":{"dur":45.0,"fire":3.33,"reach":0.199951171875,"mob":2.8125,"foot":0.375}},"wh":{"key":"Tech-Priest-Enginseer","fac":"astra-militarum","prof":{"M":"6\"","T":"4","Sv":"3+","W":"3","Ld":"7+","OC":"1"},"base":"32mm","w":[{"n":"Mechanicus pistol devastating wounds pistol","r":"12\"","a":"1","s":"3+","S":"6","ap":"0","d":"1"},{"n":"Enginseer axe","r":"Melee","a":"3","s":"4+","S":"6","ap":"-2","d":"2"},{"n":"Servo-arm extra attacks","r":"Melee","a":"1","s":"4+","S":"6","ap":"-2","d":"2"}],"core":"Leader","p":{"dur":31.1,"fire":36.5,"reach":26.0,"mob":23.6,"foot":31.5},"m":{"dur":12.0,"fire":6.0,"reach":12.0,"mob":6.0,"foot":32.0}},"alt":null},{"id":"marine-guardsman","race":"terran","tier":"Line infantry","scName":"Terran Marine","whName":"Cadian Shock Troops","whFac":"Astra Militarum","verdict":"Role of a Guardsman, kit of a Scion, silhouette of a Space Marine.","body":["This is the pairing everyone reaches for first, and it splits three ways under inspection. Doctrinally the Marine *is* a Guardsman: the cheapest body in the army, bought in blocks, spent freely, holding ground by arithmetic. Confederate and Dominion marines are drawn heavily from prison populations and put through neural resocialisation \u2014 the Imperium's equivalent is the commissar's pistol.","But the gear tells a different story. A marine wears a CMC-300 or CMC-400 powered combat suit and carries a C-14 Impaler gauss rifle that throws metal spikes at hypersonic speed. That is a carapace-armoured, AP-carrying trooper \u2014 a Tempestus Scion, whose hot-shot lasgun is the only Militarum rifle with an armour-penetration value. The Guardsman's lasgun is S3 AP0: famously, a flashlight."],"conv":["Both are the cheapest datasheet in their faction and both are meant to be spent","Both armies solve morale with institutional coercion rather than with courage","Both are useless alone and decisive in a block of thirty"],"div":["The lasgun is a directed-energy weapon; the C-14 is a kinetic mass driver. 40K's baseline is light, StarCraft's is metal","A marine's stimpack trades health for rate of fire \u2014 a Guardsman has no such button, only an order from an officer","Marines shoot aircraft with the same rifle. In 40K, anti-air is a separate weapon and usually a separate unit"],"fact":"45 HP, 50 minerals, 18 seconds. The marine is the unit of account the whole Terran economy is priced against \u2014 and the Cadian's 25mm base is the smallest in the Astra Militarum range.","score":{"role":24,"form":15,"doctrine":23,"mech":20},"total":82,"sc":{"key":"Marine","hp":45.0,"sh":0,"ar":0.0,"sup":1.0,"min":50,"gas":0,"bt":17.9,"sp":2.25,"si":9.0,"rad":0.375,"attr":["Light","Biological"],"fly":false,"w":[{"t":"Any","d":6.0,"a":1,"cd":0.861,"r":5.0,"dps":6.97,"b":[]}],"p":{"dur":8.2,"fire":32.4,"reach":43.2,"mob":34.5,"foot":10.0},"m":{"dur":45.0,"fire":6.97,"reach":5.0,"mob":2.25,"foot":0.375}},"wh":{"key":"Cadian-Shock-Troops","fac":"astra-militarum","prof":{"M":"6\"","T":"3","Sv":"5+","W":"1","Ld":"7+","OC":"2"},"base":"25mm","w":[{"n":"Bolt pistol pistol","r":"12\"","a":"1","s":"4+","S":"4","ap":"0","d":"1"},{"n":"Flamer ignores cover torrent","r":"12\"","a":"D6","s":"N/A","S":"4","ap":"0","d":"1"},{"n":"Lasgun rapid fire 1","r":"24\"","a":"1","s":"4+","S":"3","ap":"0","d":"1"},{"n":"Laspistol pistol","r":"12\"","a":"1","s":"4+","S":"3","ap":"0","d":"1"},{"n":"Meltagun melta 2","r":"12\"","a":"1","s":"4+","S":"9","ap":"-4","d":"D6"},{"n":"Sergeant's autogun","r":"24\"","a":"2","s":"4+","S":"3","ap":"0","d":"1"},{"n":"Chainsword","r":"Melee","a":"3","s":"4+","S":"3","ap":"0","d":"1"},{"n":"Close combat weapon","r":"Melee","a":"1","s":"4+","S":"3","ap":"0","d":"1"}],"core":"","p":{"dur":10.4,"fire":10.6,"reach":58.7,"mob":23.6,"foot":3.3},"m":{"dur":3.0,"fire":3.5,"reach":24.0,"mob":6.0,"foot":25.0}},"alt":{"key":"Tempestus-Scions","fac":"astra-militarum","prof":{"M":"6\"","T":"3","Sv":"4+","W":"1","Ld":"7+","OC":"1"},"base":"25mm","w":[{"n":"Bolt pistol PISTOL","r":"12\"","a":"1","s":"3+","S":"4","ap":"0","d":"1"},{"n":"Flamer ignores cover torrent","r":"12\"","a":"D6","s":"N/A","S":"4","ap":"0","d":"1"},{"n":"Hot-shot lasgun rapid fire 1","r":"24\"","a":"1","s":"3+","S":"3","ap":"-1","d":"1"},{"n":"Hot-shot laspistol pistol","r":"12\"","a":"1","s":"3+","S":"3","ap":"-1","d":"1"},{"n":"Hot-shot volley gun rapid fire 2","r":"30\"","a":"2","s":"3+","S":"4","ap":"-1","d":"1"},{"n":"Meltagun melta 2","r":"12\"","a":"1","s":"3+","S":"9","ap":"-4","d":"D6"},{"n":"Chainsword","r":"Melee","a":"4","s":"4+","S":"3","ap":"0","d":"1"},{"n":"Close combat weapon","r":"Melee","a":"2","s":"4+","S":"3","ap":"0","d":"1"},{"n":"Power fist","r":"Melee","a":"3","s":"4+","S":"6","ap":"-2","d":"2"},{"n":"Power weapon","r":"Melee","a":"3","s":"4+","S":"4","ap":"-2","d":"1"}],"core":"Deep Strike","p":{"dur":10.4,"fire":36.5,"reach":67.3,"mob":23.6,"foot":3.3},"m":{"dur":3.0,"fire":6.0,"reach":30.0,"mob":6.0,"foot":25.0}}},{"id":"reaper-jumppack","race":"terran","tier":"Raider","scName":"Reaper","whName":"Assault Intercessors with Jump Packs","whFac":"Space Marines","verdict":"Identical tactic, opposite social class.","body":["Strap a jet to an infantryman and you get the same unit twice: something that ignores the map's chokepoints, lands behind the line, kills workers or artillery crews, and dies the moment it is caught. The Reaper's jet pack lets it cross cliffs the rest of the army must walk around; Deep Strike drops Assault Intercessors anywhere more than 9\" from the enemy.","What differs is who gets the jet. The Imperium gives jump packs to its finest \u2014 transhuman veterans in the assault doctrine. The Dominion gives them to men too unstable for the regular corps."],"conv":["Vertical mobility is the entire point of both units; neither is efficient in a straight fight","Both exist to punish an opponent who has committed everything to the front","Both trade durability for arrival speed"],"div":["Reapers cannot shoot upward at all; jump-pack marines fight whatever they land next to","The Reaper's KD8 charge is a timed demolition bomb \u2014 closer to a grenade-armed sapper than to a chainsword"],"fact":"Reaper jet packs let them scale cliffs, which is why a single early Reaper can be a genuine emergency. Deep Strike's 9\" bubble is 40K's way of writing the same anxiety into a rule.","score":{"role":23,"form":18,"doctrine":12,"mech":19},"total":72,"sc":{"key":"Reaper","hp":60.0,"sh":0,"ar":0.0,"sup":1.0,"min":50,"gas":50,"bt":32.1,"sp":3.75,"si":9.0,"rad":0.375,"attr":["Light","Biological"],"fly":false,"w":[{"t":"Ground","d":4.0,"a":2,"cd":1.1,"r":5.0,"dps":7.27,"b":[]}],"p":{"dur":10.9,"fire":37.8,"reach":43.2,"mob":90.9,"foot":10.0},"m":{"dur":60.0,"fire":7.27,"reach":5.0,"mob":3.75,"foot":0.375}},"wh":{"key":"Assault-Intercessors-With-Jump-Packs","fac":"space-marines","prof":{"M":"12\"","T":"4","Sv":"3+","W":"2","Ld":"6+","OC":"1"},"base":"32mm","w":[{"n":"Hand flamer IGNORES COVER PISTOL TORRENT","r":"12\"","a":"D6","s":"N/A","S":"3","ap":"0","d":"1"},{"n":"Heavy bolt pistol pistol","r":"18\"","a":"1","s":"3+","S":"4","ap":"-1","d":"1"},{"n":"Astartes chainsword","r":"Melee","a":"4","s":"3+","S":"4","ap":"-1","d":"1"},{"n":"Power weapon","r":"Melee","a":"4","s":"3+","S":"5","ap":"-2","d":"1"},{"n":"Power fist","r":"Melee","a":"3","s":"3+","S":"8","ap":"-2","d":"2"}],"core":"Deep Strike","p":{"dur":26.4,"fire":36.5,"reach":42.3,"mob":91.5,"foot":31.5},"m":{"dur":8.0,"fire":6.0,"reach":18.0,"mob":12.0,"foot":32.0}},"alt":null},{"id":"marauder-ogryn","race":"terran","tier":"Heavy infantry","scName":"Marauder","whName":"Ogryn Squad","whFac":"Astra Militarum","verdict":"One Terran unit doing two Imperial jobs.","body":["When line infantry stop being able to break what's in front of them, both armies reach for the same answer: a much bigger body carrying a much blunter gun. The Marauder is a human in the 5-4 Armored Infantry Suit \u2014 developed from the firebat's CMC-660 \u2014 dual-wielding Quad K12 \"Punisher\" grenade launchers whose concussive shells slow whatever survives them.","The Imperium splits that role in half. The biological answer is the Ogryn: an abhuman, T6 with a 6+ Feel No Pain, firing a ripper gun that is S5 AP-1 D2 at 18\" and hits like a club in melee. The mechanical answer is the Centurion Assault Squad \u2014 T7, a 2+ save, siege drills at S10 \u2014 which is what a Marauder actually looks like."],"conv":["Both trade rate of fire for stopping power against armoured targets","Both are markedly slower than the line infantry they escort","Both are the unit you build when the enemy's front line stopped dying"],"div":["Ogryn toughness is grown, not issued. The Marauder's is bolted on and can be refitted between wars","Concussive Shells slow the target \u2014 40K has no movement-debuff of that kind on a mainline weapon"],"fact":"Blizzard's own flavour text claims 47% of marauders have never been to jail and only 23% have ever been accused of murder. Ogryns, by contrast, are bred loyal and docile \u2014 the Imperium's heavy infantry problem is keeping them *interested*.","score":{"role":22,"form":19,"doctrine":16,"mech":21},"total":78,"sc":{"key":"Marauder","hp":125.0,"sh":0,"ar":1.0,"sup":2.0,"min":100,"gas":25,"bt":21.4,"sp":2.25,"si":10.0,"rad":0.5625,"attr":["Armored","Biological"],"fly":false,"w":[{"t":"Ground","d":10.0,"a":1,"cd":1.5,"r":6.0,"dps":6.67,"b":[["Armored",10.0]]}],"p":{"dur":36.4,"fire":25.7,"reach":63.5,"mob":34.5,"foot":32.7},"m":{"dur":125.0,"fire":6.67,"reach":6.0,"mob":2.25,"foot":0.5625}},"wh":{"key":"Ogryn-Squad","fac":"astra-militarum","prof":{"M":"6\"","T":"6","Sv":"5+","W":"3","Ld":"7+","OC":"1"},"base":"40mm","w":[{"n":"Ripper gun rapid fire 3","r":"18\"","a":"3","s":"4+","S":"5","ap":"-1","d":"2"},{"n":"Ripper gun","r":"Melee","a":"4","s":"3+","S":"6","ap":"-1","d":"1"}],"core":"Feel No Pain 6+","p":{"dur":53.8,"fire":36.5,"reach":42.3,"mob":23.6,"foot":50.0},"m":{"dur":18.0,"fire":6.0,"reach":18.0,"mob":6.0,"foot":40.0}},"alt":{"key":"Centurion-Assault-Squad","fac":"space-marines","prof":{"M":"4\"","T":"7","Sv":"2+","W":"4","Ld":"6+","OC":"2"},"base":"50mm","w":[{"n":"Centurion bolters rapid fire 3 twin-linked","r":"24\"","a":"3","s":"3+","S":"4","ap":"0","d":"1"},{"n":"Twin flamer ignores cover torrent twin-linked","r":"12\"","a":"D6","s":"N/A","S":"4","ap":"0","d":"1"},{"n":"Twin meltagun melta 2 twin-linked","r":"12\"","a":"1","s":"3+","S":"9","ap":"-4","d":"D6"},{"n":"Siege drills twin-linked","r":"Melee","a":"3","s":"3+","S":"10","ap":"-2","d":"3"}],"core":"","p":{"dur":58.5,"fire":64.4,"reach":58.7,"mob":0.9,"foot":65.2},"m":{"dur":28.0,"fire":9.0,"reach":24.0,"mob":4.0,"foot":50.0}}},{"id":"hellbat-aggressor","race":"terran","tier":"Assault infantry","scName":"Hellbat (Firebat lineage)","whName":"Aggressor Squad","whFac":"Space Marines","verdict":"Flamethrowers bolted to the forearms, 38,000 years apart.","body":["The firebat and its Hellbat successor exist because someone decided the correct response to a swarm is a wall of burning fuel delivered from wrist-mounted projectors. Aggressors reached the same conclusion: flamestorm gauntlets, one per arm, worn over Gravis armour.","Mechanically both are short-ranged, both hit an area rather than a target, and both are built to stand in the open and be shot at while they do it. The Hellbat's cone and the gauntlet's Torrent keyword \u2014 which hits automatically, no roll required \u2014 encode the same idea: against a horde, accuracy is not the problem."],"conv":["Arm-mounted flame projectors in heavy armour, in both cases the unit's whole identity","Both are area weapons that reward the enemy clumping up","Both are slow, tanky, and helpless at range"],"div":["Torrent auto-hits; the Hellbat still rolls nothing but is capped by a cone shape and friendly fire in campaign","Aggressors are transhuman veterans. Firebats are, canonically, pyromaniacs with a job"],"fact":"The firebat's perdition gauntlets are plasma-based rather than chemical \u2014 closer to a heavy flamer's promethium in effect than in physics.","score":{"role":23,"form":22,"doctrine":14,"mech":20},"total":79,"sc":{"key":"HellionTank","hp":135.0,"sh":0,"ar":0.0,"sup":2.0,"min":100,"gas":0,"bt":21.4,"sp":2.25,"si":10.0,"rad":0.625,"attr":["Light","Biological","Mechanical"],"fly":false,"w":[{"t":"Ground","d":18.0,"a":1,"cd":2.0,"r":2.0,"dps":9.0,"b":[]}],"p":{"dur":39.1,"fire":50.0,"reach":20.3,"mob":34.5,"foot":40.9},"m":{"dur":135.0,"fire":9.0,"reach":2.0,"mob":2.25,"foot":0.625}},"wh":{"key":"Aggressor-Squad","fac":"space-marines","prof":{"M":"5\"","T":"6","Sv":"3+","W":"3","Ld":"6+","OC":"1"},"base":"40mm","w":[{"n":"Auto boltstorm gauntlets twin-linked","r":"18\"","a":"3","s":"3+","S":"4","ap":"0","d":"1"},{"n":"Flamestorm gauntlets ignores cover torrent twin-linked","r":"12\"","a":"D6+1","s":"N/A","S":"4","ap":"0","d":"1"},{"n":"Fragstorm grenade launcher blast","r":"18\"","a":"D6","s":"3+","S":"4","ap":"0","d":"1"},{"n":"Twin power fists twin-linked","r":"Melee","a":"3","s":"3+","S":"8","ap":"-2","d":"2"}],"core":"","p":{"dur":53.8,"fire":36.5,"reach":42.3,"mob":6.6,"foot":50.0},"m":{"dur":18.0,"fire":6.0,"reach":18.0,"mob":5.0,"foot":40.0}},"alt":null},{"id":"ghost-vindicare","race":"terran","tier":"Assassin","scName":"Terran Ghost","whName":"Vindicare Assassin","whFac":"Imperial Agents","verdict":"Two state programmes that manufacture people into weapons.","body":["A Ghost and a Vindicare are the same institution wearing different uniforms. Both are single, irreplaceable operatives produced by a secretive state programme that rebuilt them psychologically \u2014 the Ghost Academy erases memories; the Officio Assassinorum's temples erase the person. Both are officially deniable. Both cloak. Both exist to delete the one model that matters.","The rules agree. The Vindicare's Exitus rifle is 48\", BS2+, S8 AP-3 for D3+3 damage with Devastating Wounds, Ignores Cover and Precision \u2014 Precision being the rule that lets it shoot a character out of a squad. The Ghost's Snipe does the same job, and its EMP strips shields and energy, which is the closest thing StarCraft has to an anti-psyker weapon."],"conv":["Permanent stealth that requires dedicated detection to counter","Both kill high-value single targets rather than trading with a line","Both are the delivery mechanism for something far larger than themselves"],"div":["Ghosts are psionic. The Vindicare is not \u2014 the Imperium's anti-psyker specialist is the Culexus, a separate temple","The Ghost calls down the tactical nuke personally and must survive the channel. The Imperium's strategic strike is a vehicle: the Deathstrike"],"fact":"Dominion Intelligence concluded that no single unit induces more anxiety disorders in its own military personnel than the Ghost. The Officio Assassinorum would consider that a design goal.","score":{"role":24,"form":21,"doctrine":24,"mech":21},"total":90,"sc":{"key":"Ghost","hp":100.0,"sh":0,"ar":0.0,"sup":3.0,"min":150,"gas":125,"bt":28.6,"sp":2.8125,"si":11.0,"rad":0.375,"attr":["Biological","Psionic"],"fly":false,"w":[{"t":"Any","d":10.0,"a":1,"cd":1.5,"r":6.0,"dps":6.67,"b":[["Light",10.0]]}],"p":{"dur":27.3,"fire":25.7,"reach":63.5,"mob":67.3,"foot":10.0},"m":{"dur":100.0,"fire":6.67,"reach":6.0,"mob":2.8125,"foot":0.375}},"wh":{"key":"Vindicare-Assassin","fac":"imperial-agents","prof":{"M":"7\"","T":"4","Sv":"6+","W":"4","Ld":"6+","OC":"1"},"base":"32mm","w":[{"n":"Exitus pistol devastating wounds ignores cover pistol precision","r":"12\"","a":"3","s":"2+","S":"6","ap":"-2","d":"3"},{"n":"Exitus rifle devastating wounds heavy ignores cover precision","r":"48\"","a":"1","s":"2+","S":"8","ap":"-3","d":"D3+3"},{"n":"Vindicare combat knife","r":"Melee","a":"4","s":"2+","S":"4","ap":"-1","d":"1"}],"core":"","p":{"dur":46.2,"fire":64.4,"reach":89.4,"mob":42.5,"foot":31.5},"m":{"dur":16.0,"fire":9.0,"reach":48.0,"mob":7.0,"foot":32.0}},"alt":{"key":"Callidus-Assassin","fac":"imperial-agents","prof":{"M":"7\"","T":"4","Sv":"6+","W":"4","Ld":"6+","OC":"1"},"base":"32mm","w":[{"n":"Neural shredder anti-infantry 2+ precision torrent","r":"12\"","a":"D6","s":"N/A","S":"5","ap":"-2","d":"1"},{"n":"Phase sword and poison blades lethal hits precision","r":"Melee","a":"5","s":"2+","S":"5","ap":"-4","d":"2"}],"core":"","p":{"dur":46.2,"fire":70.2,"reach":26.0,"mob":42.5,"foot":31.5},"m":{"dur":16.0,"fire":10.0,"reach":12.0,"mob":7.0,"foot":32.0}}},{"id":"hellion-hellhound","race":"terran","tier":"Light vehicle","scName":"Hellion","whName":"Hellhound","whFac":"Astra Militarum","verdict":"The closest 1:1 in the entire databank \u2014 including the name.","body":["A fast, thin-skinned wheeled or tracked vehicle whose only weapon is fire, used to run down infantry in the open and burn them before they can spread out. It is called a Hellion in one universe and a Hellhound in the other, and if you swapped the models nothing about either army's plan would change.","Both are the fastest thing in their army's motor pool \u2014 the Hellion at 4.25 is the quickest Terran ground unit, the Hellhound moves 12\" \u2014 and both evaporate the moment anything with an anti-tank weapon notices them."],"conv":["Flame as the sole armament, mounted on the cheapest fast chassis available","Both are specifically anti-infantry and specifically bad against armour","Both are raiders: they work behind the line, not in it"],"div":["The Hellion's flame is a line, not a cone \u2014 it is aimed *through* a formation","The Hellhound's Inferno Cannon Ignores Cover, which is the rule that makes it worth its points; StarCraft has no cover system to ignore"],"fact":"Hellions can be refitted into Hellbats \u2014 the vehicle unfolds into a walking flamethrower. The Imperium has no equivalent, because a Hellhound is a consecrated machine and you do not ask it to become infantry.","score":{"role":24,"form":23,"doctrine":20,"mech":23},"total":90,"sc":{"key":"Hellion","hp":90.0,"sh":0,"ar":0.0,"sup":2.0,"min":100,"gas":0,"bt":21.4,"sp":4.25,"si":10.0,"rad":0.625,"attr":["Light","Mechanical"],"fly":false,"w":[{"t":"Ground","d":8.0,"a":1,"cd":2.5,"r":5.0,"dps":3.2,"b":[["Light",6.0]]}],"p":{"dur":22.7,"fire":2.7,"reach":43.2,"mob":97.3,"foot":40.9},"m":{"dur":90.0,"fire":3.2,"reach":5.0,"mob":4.25,"foot":0.625}},"wh":{"key":"Hellhound","fac":"astra-militarum","prof":{"M":"10\"","T":"10","Sv":"2+","W":"11","Ld":"7+","OC":"3"},"base":null,"w":[{"n":"Chem cannon anti-infantry 2+ torrent","r":"12\"","a":"D6+1","s":"N/A","S":"2","ap":"-2","d":"2"},{"n":"Heavy bolter sustained hits 1","r":"36\"","a":"3","s":"4+","S":"5","ap":"-1","d":"2"},{"n":"Heavy flamer ignores cover torrent","r":"12\"","a":"D6","s":"N/A","S":"5","ap":"-1","d":"1"},{"n":"Hunter-killer missile one shot","r":"48\"","a":"1","s":"4+","S":"14","ap":"-3","d":"D6"},{"n":"Inferno cannon ignores cover torrent","r":"18\"","a":"2D6","s":"N/A","S":"6","ap":"-2","d":"1"},{"n":"Melta cannon blast melta 4","r":"18\"","a":"D3","s":"4+","S":"9","ap":"-4","d":"D6"},{"n":"Multi-melta melta 2","r":"18\"","a":"2","s":"4+","S":"9","ap":"-4","d":"D6"},{"n":"Armoured tracks","r":"Melee","a":"3","s":"4+","S":"6","ap":"0","d":"1"}],"core":"Deadly Demise D6","p":{"dur":82.1,"fire":64.4,"reach":89.4,"mob":78.3,"foot":null},"m":{"dur":110.0,"fire":9.0,"reach":48.0,"mob":10.0,"foot":null}},"alt":null},{"id":"siegetank-basilisk","race":"terran","tier":"Artillery","scName":"Crucio Siege Tank","whName":"Basilisk","whFac":"Astra Militarum","verdict":"Both armies decided artillery should out-range its own eyes.","body":["The Crucio carries twin 90mm plasma cannons to fight with and a 180mm shock cannon to besiege with, and it cannot use the second without planting itself. Sieged, its range goes from 7 to 13 \u2014 while its sight range is only 11. The tank can shell ground it physically cannot see, which is why StarCraft players talk about \"spotters\" at all.","The Basilisk writes the same sentence as a keyword. Its Earthshaker cannon is 240\" \u2014 longer than any table \u2014 Blast, and Indirect Fire, the rule for shooting targets you have no line of sight to. Both armies concluded that the defining artillery problem is not range but vision."],"conv":["Indirect fire that depends on someone else's eyes is the core mechanic in both","Both are the reason an attacking army must commit rather than probe","Both are near-helpless if something reaches them"],"div":["The Basilisk never stops moving \u2014 10\" and still fires. Siege mode is a hard commitment that takes ~3 seconds each way","The Crucio weighs around 60 tons and is crewed by as few as one. A Basilisk is a Chimera chassis with an artillery piece bolted on and a full crew"],"fact":"The Arclite that preceded the Crucio mounted twin 80mm PPG-7 plasma cannons and a 120mm Mjolnir shock cannon. The upgrade to 90mm/180mm is the single most consequential calibre change in the Koprulu sector.","score":{"role":24,"form":20,"doctrine":22,"mech":24},"total":90,"sc":{"key":"SiegeTankSieged","hp":175.0,"sh":0,"ar":1.0,"sup":3.0,"min":150,"gas":125,"bt":3.1,"sp":null,"si":11.0,"rad":0.875,"attr":["Armored","Mechanical"],"fly":false,"w":[{"t":"Ground","d":40.0,"a":1,"cd":3.0,"r":13.0,"dps":13.33,"b":[["Armored",30.0]]}],"p":{"dur":61.8,"fire":75.7,"reach":98.6,"mob":1.8,"foot":70.9},"m":{"dur":175.0,"fire":13.33,"reach":13.0,"mob":0.0,"foot":0.875}},"wh":{"key":"Basilisk","fac":"astra-militarum","prof":{"M":"10\"","T":"9","Sv":"3+","W":"11","Ld":"7+","OC":"3"},"base":null,"w":[{"n":"Earthshaker cannon blast indirect fire","r":"240\"","a":"D6+3","s":"4+","S":"8","ap":"-2","d":"2"},{"n":"Heavy bolter sustained hits 1","r":"36\"","a":"3","s":"4+","S":"5","ap":"-1","d":"2"},{"n":"Heavy flamer ignores cover torrent","r":"12\"","a":"D6","s":"N/A","S":"5","ap":"-1","d":"1"},{"n":"Hunter-killer missile one shot","r":"48\"","a":"1","s":"4+","S":"14","ap":"-3","d":"D6"},{"n":"Armoured tracks","r":"Melee","a":"3","s":"4+","S":"6","ap":"0","d":"1"}],"core":"Deadly Demise D3","p":{"dur":73.6,"fire":78.8,"reach":100.0,"mob":78.3,"foot":null},"m":{"dur":99.0,"fire":13.0,"reach":240.0,"mob":10.0,"foot":null}},"alt":null},{"id":"thor-knight","race":"terran","tier":"Walker","scName":"Thor","whName":"Knight Paladin","whFac":"Imperial Knights","verdict":"Same silhouette, incompatible ideas about who owns it.","body":["Two enormous bipedal weapons platforms, each crewed by a single pilot, each the largest thing its army routinely walks onto a battlefield. The Thor's twin 330mm cannons and Javelin anti-air missiles cover the same tactical ground as a Knight's rapid-fire battlecannon and reaper chainsword.","Then the ownership model diverges completely. A Thor is factory output \u2014 300 minerals, 200 gas, repairable by any SCV with a fusion cutter. A Knight Paladin is a feudal heirloom bonded to a noble bloodline through a Throne Mechanicum, older than most Imperial institutions, and unrepairable by anyone below a Sacristan."],"conv":["Single-pilot super-heavy walkers that anchor an army's centre","Both are repaired, not healed, and both are worth defending with the rest of the army","Both carry an anti-air answer the rest of the list lacks"],"div":["The Thor is mass-producible. The Knight is inherited, and its loss is a dynastic event","Knights have Deadly Demise \u2014 they explode and take your own models with them. A dying Thor simply stops"],"fact":"The Thor sits at 400 HP and 6 supply; the Knight Paladin's 170x109mm base is one of the largest in the game. Both are the point where their army stops buying more units and starts buying one unit.","score":{"role":21,"form":23,"doctrine":11,"mech":18},"total":73,"sc":{"key":"Thor","hp":400.0,"sh":0,"ar":1.0,"sup":6.0,"min":300,"gas":200,"bt":42.9,"sp":1.875,"si":11.0,"rad":1.0,"attr":["Armored","Mechanical","Massive"],"fly":false,"w":[{"t":"Air","d":6.0,"a":4,"cd":3.0,"r":10.0,"dps":8.0,"b":[["Light",6.0]]},{"t":"Ground","d":30.0,"a":2,"cd":1.28,"r":7.0,"dps":46.87,"b":[]}],"p":{"dur":92.7,"fire":100.0,"reach":93.2,"mob":12.7,"foot":83.6},"m":{"dur":400.0,"fire":46.87,"reach":10.0,"mob":1.875,"foot":1.0}},"wh":{"key":"Knight-Paladin","fac":"imperial-knights","prof":{"M":"10\"","T":"11","Sv":"3+","W":"26","Ld":"6+","OC":"10"},"base":"170x109mm","w":[{"n":"Ironstorm missile pod blast indirect fire","r":"48\"","a":"D6+1","s":"3+","S":"5","ap":"0","d":"1"},{"n":"Meltagun melta 2","r":"12\"","a":"1","s":"3+","S":"9","ap":"-4","d":"D6"},{"n":"Questoris heavy stubber rapid fire 3","r":"36\"","a":"3","s":"3+","S":"4","ap":"-1","d":"1"},{"n":"Rapid-fire battle cannon blast rapid fire d6+3","r":"72\"","a":"D6+3","s":"3+","S":"10","ap":"-1","d":"3"},{"n":"Stormspear rocket pod","r":"48\"","a":"3","s":"3+","S":"8","ap":"-2","d":"D6"},{"n":"Twin Icarus autocannon anti-fly 2+ twin-linked","r":"48\"","a":"3","s":"3+","S":"7","ap":"-1","d":"2"}],"core":"Deadly Demise D6","p":{"dur":100.0,"fire":94.2,"reach":98.1,"mob":78.3,"foot":100.0},"m":{"dur":286.0,"fire":19.5,"reach":72.0,"mob":10.0,"foot":136.1}},"alt":{"key":"Armiger-Warglaive","fac":"imperial-knights","prof":{"M":"12\"","T":"9","Sv":"3+","W":"14","Ld":"7+","OC":"6"},"base":"100mm","w":[{"n":"Meltagun melta 2","r":"12\"","a":"1","s":"3+","S":"9","ap":"-4","d":"D6"},{"n":"Questoris heavy stubber rapid fire 3","r":"36\"","a":"3","s":"3+","S":"4","ap":"-1","d":"1"},{"n":"Thermal spear melta 4","r":"18\"","a":"2","s":"3+","S":"12","ap":"-4","d":"D6"}],"core":"Deadly Demise D3","p":{"dur":86.8,"fire":54.8,"reach":75.0,"mob":91.5,"foot":89.1},"m":{"dur":126.0,"fire":7.0,"reach":36.0,"mob":12.0,"foot":100.0}}},{"id":"medivac-valkyrie","race":"terran","tier":"Transport","scName":"Medivac Dropship","whName":"Valkyrie","whFac":"Astra Militarum","verdict":"The aircraft that makes infantry doctrine viable.","body":["Neither army's infantry works without an airframe willing to fly into the danger zone and unload. The Medivac \u2014 a modified Quantradyne APOD-33 \u2014 carries eight and heals biological units while it hovers; the Valkyrie carries twelve and inserts them by grav-chute while firing rocket pods and a multi-laser.","The split is medicine versus firepower. Blizzard folded the battlefield medic into the transport and created the defining Terran unit of two decades of play. The Imperium keeps its healing on foot, in the person of an Apothecary, and spends the airframe's budget on guns."],"conv":["Both are the delivery system that makes cheap infantry a strategy rather than a liability","Both are fragile and both are the correct thing to shoot at","Both allow an army to arrive somewhere the ground route does not permit"],"div":["The Medivac has no weapons at all. The Valkyrie is a gunship that happens to carry troops","Medivac healing is continuous and free. 40K's equivalent is a one-model Apothecary and a dice roll"],"fact":"Medivac afterburners exist because Blizzard needed a button that converts money into arriving-sooner. The Valkyrie's Grav-Chute Insertion does the same in one rule: disembark after moving.","score":{"role":22,"form":20,"doctrine":17,"mech":19},"total":78,"sc":{"key":"Medivac","hp":150.0,"sh":0,"ar":1.0,"sup":2.0,"min":100,"gas":100,"bt":30.0,"sp":2.5,"si":11.0,"rad":0.75,"attr":["Armored","Mechanical"],"fly":true,"w":[],"p":{"dur":50.9,"fire":null,"reach":null,"mob":50.0,"foot":57.3},"m":{"dur":150.0,"fire":null,"reach":null,"mob":2.5,"foot":0.75}},"wh":{"key":"Valkyrie","fac":"astra-militarum","prof":{"M":"20+\"","T":"10","Sv":"2+","W":"14","Ld":"7+","OC":"0"},"base":null,"w":[{"n":"Heavy bolter sustained hits 1","r":"36\"","a":"3","s":"4+","S":"5","ap":"-1","d":"2"},{"n":"Hellstrike missiles anti-fly 2+","r":"48\"","a":"1","s":"4+","S":"10","ap":"-3","d":"D6"},{"n":"Lascannon","r":"48\"","a":"1","s":"4+","S":"12","ap":"-3","d":"D6+1"},{"n":"Multi-laser","r":"36\"","a":"4","s":"4+","S":"6","ap":"0","d":"1"},{"n":"Multiple rocket pod blast","r":"36\"","a":"D6","s":"4+","S":"6","ap":"0","d":"1"},{"n":"Armoured hull","r":"Melee","a":"3","s":"4+","S":"6","ap":"0","d":"1"}],"core":"","p":{"dur":90.6,"fire":36.5,"reach":89.4,"mob":99.1,"foot":null},"m":{"dur":140.0,"fire":6.0,"reach":48.0,"mob":20.0,"foot":null}},"alt":null},{"id":"nuke-deathstrike","race":"terran","tier":"Strategic","scName":"Tactical Nuclear Strike","whName":"Deathstrike","whFac":"Astra Militarum","verdict":"The one-shot weapon that announces itself before it lands.","body":["Both universes made the same design decision about weapons of mass destruction: they must be telegraphed. A Ghost calling a nuke plants a red dot on the ground and must stand still, cloaked but findable, while the countdown runs \u2014 the drama is entirely in whether the opponent finds the spotter in time.","The Deathstrike is a launcher that spends the early game doing nothing, then fires exactly once. Both are less about damage than about the shape they force on the enemy's army: don't clump, don't commit, don't stand there."],"conv":["Single-use strategic ordnance that changes enemy behaviour long before it detonates","Both require a vulnerable setup period the opponent can interrupt","Both are area denial first and damage second"],"div":["StarCraft's nuke needs a living, killable operator inside enemy territory. The Deathstrike needs a vehicle parked safely at home","The Imperium's true strategic weapon is Exterminatus \u2014 orbital, planetary, and off the table entirely"],"fact":"The nuke's warning \u2014 a dot, a voice line, and an audible klaxon for the target \u2014 is one of the few deliberately *fair* weapons of mass destruction in game design.","score":{"role":23,"form":16,"doctrine":22,"mech":22},"total":83,"sc":{"key":"Ghost","hp":100.0,"sh":0,"ar":0.0,"sup":3.0,"min":150,"gas":125,"bt":28.6,"sp":2.8125,"si":11.0,"rad":0.375,"attr":["Biological","Psionic"],"fly":false,"w":[{"t":"Any","d":10.0,"a":1,"cd":1.5,"r":6.0,"dps":6.67,"b":[["Light",10.0]]}],"p":{"dur":27.3,"fire":25.7,"reach":63.5,"mob":67.3,"foot":10.0},"m":{"dur":100.0,"fire":6.67,"reach":6.0,"mob":2.8125,"foot":0.375}},"wh":{"key":"Deathstrike","fac":"astra-militarum","prof":{"M":"10\"","T":"10","Sv":"3+","W":"11","Ld":"7+","OC":"3"},"base":null,"w":[{"n":"Deathstrike missile blast one shot plasma warhead","r":"N/A","a":"2D6","s":"2+","S":"16","ap":"-4","d":"1"},{"n":"Heavy bolter sustained hits 1","r":"36\"","a":"3","s":"4+","S":"5","ap":"-1","d":"2"},{"n":"Heavy flamer ignores cover torrent","r":"12\"","a":"D6","s":"N/A","S":"5","ap":"-1","d":"1"},{"n":"Hunter-killer missile one shot","r":"48\"","a":"1","s":"3+","S":"14","ap":"-3","d":"D6"},{"n":"Armoured tracks","r":"Melee","a":"3","s":"4+","S":"6","ap":"0","d":"1"}],"core":"Deadly Demise D6","p":{"dur":82.1,"fire":54.8,"reach":89.4,"mob":78.3,"foot":null},"m":{"dur":110.0,"fire":7.0,"reach":48.0,"mob":10.0,"foot":null}},"alt":null},{"id":"drone-ripper","race":"zerg","tier":"Labour","scName":"Drone","whName":"Ripper Swarms","whFac":"Tyranids","verdict":"Both hives digest the world. Only one shows you the spreadsheet.","body":["The Drone is the Swarm's hands: it gathers minerals and vespene, and when the hive needs a structure the Drone *becomes* it, dying in the act. Ripper Swarms are the Tyranid equivalent at the lore level \u2014 the lowest bioform, deployed in numbers, whose function is to strip a battlefield down to reusable biomass.","Mechanically they barely touch. Rippers are a T2, W4, OC0 Deep Strike nuisance; the Drone never fights at all. What they share is a principle: in both universes the swarm's least valuable creature is the one that actually converts the planet into more swarm."],"conv":["The lowest-status bioform in an army that assigns no status to anything","Both exist to turn captured ground into hive infrastructure","Both are produced in bulk and never mourned"],"div":["Tyranid consumption happens after the battle, in lore. Warhammer's tabletop has no economy for Rippers to feed","A Drone dies to create a building. A Tyranid structure is grown from capillary towers and digestion pools, off-screen"],"fact":"The Drone's build mechanic \u2014 the worker is consumed by the building \u2014 is unique among major RTS factions, and it is the purest expression of a species that does not distinguish a tool from a body.","score":{"role":16,"form":17,"doctrine":20,"mech":9},"total":62,"sc":{"key":"Drone","hp":40.0,"sh":0,"ar":0.0,"sup":1.0,"min":50,"gas":0,"bt":12.1,"sp":2.8125,"si":8.0,"rad":0.375,"attr":["Light","Biological"],"fly":false,"w":[{"t":"Ground","d":5.0,"a":1,"cd":1.5,"r":0.199951171875,"dps":3.33,"b":[]}],"p":{"dur":4.5,"fire":9.5,"reach":10.8,"mob":67.3,"foot":10.0},"m":{"dur":40.0,"fire":3.33,"reach":0.199951171875,"mob":2.8125,"foot":0.375}},"wh":{"key":"Ripper-Swarms","fac":"tyranids","prof":{"M":"6\"","T":"2","Sv":"6+","W":"4","Ld":"8+","OC":"0"},"base":"40mm","w":[{"n":"Spinemaws pistol","r":"6\"","a":"4","s":"5+","S":"3","ap":"0","d":"1"},{"n":"Chitinous claws and teeth sustained hits 1","r":"Melee","a":"6","s":"5+","S":"2","ap":"0","d":"1"}],"core":"Deep Strike","p":{"dur":26.4,"fire":36.5,"reach":17.3,"mob":23.6,"foot":50.0},"m":{"dur":8.0,"fire":6.0,"reach":6.0,"mob":6.0,"foot":40.0}},"alt":null},{"id":"overlord-synapse","race":"zerg","tier":"Command","scName":"Overlord","whName":"Neurotyrant","whFac":"Tyranids","verdict":"Supply cap and synapse range are the same idea, written twice.","body":["This is the deepest structural convergence in the databank, and it is invisible if you only compare stat lines. StarCraft's Overlord provides 8 supply and cannot attack. Its entire purpose is to raise the ceiling on how much Swarm can exist. Kill enough of them and the Zerg player cannot act, regardless of how much money they have.","The Tyranid Hive Mind runs the same constraint as a radius. Synapse creatures \u2014 Neurotyrants, Warriors, Tyrants \u2014 project the Hive Mind's will over a distance; outside that leash, lesser bioforms revert to instinct. Both games decided that the horde's real vulnerability is not its bodies but its bandwidth."],"conv":["Neither unit fights; both are load-bearing for the army's ability to function","Both are the correct target for an opponent who wants to stall a swarm rather than kill it","Both make the horde's cohesion a physical, attackable object"],"div":["Supply is global and absolute \u2014 an Overlord anywhere on the map counts. Synapse is a bubble measured in inches","The Overlord also secretes creep, carries troops, and upgrades into a detector. The Neurotyrant is a psychic weapon in its own right"],"fact":"At 0.64 movement speed the un-upgraded Overlord is the slowest unit in StarCraft II. The Hive Mind's bandwidth, in both universes, arrives late and cannot run.","score":{"role":23,"form":15,"doctrine":25,"mech":22},"total":85,"sc":{"key":"Overlord","hp":200.0,"sh":0,"ar":0.0,"sup":-8.0,"min":100,"gas":0,"bt":17.9,"sp":0.64453125,"si":11.0,"rad":1.0,"attr":["Armored","Biological"],"fly":true,"w":[],"p":{"dur":75.5,"fire":null,"reach":null,"mob":5.5,"foot":83.6},"m":{"dur":200.0,"fire":null,"reach":null,"mob":0.64453125,"foot":1.0}},"wh":{"key":"Neurotyrant","fac":"tyranids","prof":{"M":"6\"","T":"8","Sv":"4+","W":"9","Ld":"7+","OC":"3"},"base":"50mm","w":[{"n":"Psychic scream ignores cover psychic torrent","r":"18\"","a":"2D6","s":"N/A","S":"5","ap":"-1","d":"2"},{"n":"Neurotyrant claws and lashes","r":"Melee","a":"6","s":"3+","S":"5","ap":"0","d":"1"}],"core":"Leader","p":{"dur":66.0,"fire":80.8,"reach":42.3,"mob":23.6,"foot":65.2},"m":{"dur":72.0,"fire":14.0,"reach":18.0,"mob":6.0,"foot":50.0}},"alt":{"key":"Zoanthropes","fac":"tyranids","prof":{"M":"5\"","T":"5","Sv":"5+","W":"3","Ld":"7+","OC":"1"},"base":"40mm","w":[{"n":"Chitinous claws and teeth","r":"Melee","a":"2","s":"5+","S":"3","ap":"0","d":"1"}],"core":"","p":{"dur":37.7,"fire":2.9,"reach":7.7,"mob":6.6,"foot":50.0},"m":{"dur":15.0,"fire":2.0,"reach":1.0,"mob":5.0,"foot":40.0}}},{"id":"zergling-hormagaunt","race":"zerg","tier":"Swarm","scName":"Zergling","whName":"Hormagaunts","whFac":"Tyranids","verdict":"The same creature, down to the economics.","body":["A metre-tall, dog-sized, four-limbed melee organism with sickle claws, bred in numbers too large to count, thrown at the enemy before anything else arrives, and priced so low that losing all of them is an acceptable opening move. That describes both, exactly.","Zerglings hatch two per larva from DNA distilled from the dune runner and hybridised with fifteen other strains. Hormagaunts are a stable Gaunt-genus mutation that multiplies out of control and needs no orders because hunger is sufficient instruction. Both are the fastest infantry in their army \u2014 the Zergling at 2.95 base, the Hormagaunt at M10\", faster than anything else on foot in 40K."],"conv":["Fastest, cheapest, most numerous melee body; both come in broods and both are spent","Both are functionally free to the commander and psychologically free to themselves","Both are hard-countered by exactly the same thing: area damage and a wall"],"div":["Hormagaunt talons are AP-1 \u2014 genuinely dangerous to armour. Zergling claws are flat 5 damage with no bonus at all","Zerglings can morph into Banelings. A Hormagaunt is a finished product"],"fact":"Zerglings are 1 metre tall and hunt in pairs, and they cost 25 minerals for two. A Hormagaunt sits on a 28.5mm base, the smallest in the Tyranid range. Neither army's commander is expected to notice individual losses.","score":{"role":25,"form":24,"doctrine":23,"mech":24},"total":96,"sc":{"key":"Zergling","hp":35.0,"sh":0,"ar":0.0,"sup":0.5,"min":25,"gas":0,"bt":17.1,"sp":2.953125,"si":8.0,"rad":0.375,"attr":["Light","Biological"],"fly":false,"w":[{"t":"Ground","d":5.0,"a":1,"cd":0.696,"r":0.10009765625,"dps":7.18,"b":[]}],"p":{"dur":1.8,"fire":35.1,"reach":2.7,"mob":80.0,"foot":10.0},"m":{"dur":35.0,"fire":7.18,"reach":0.10009765625,"mob":2.953125,"foot":0.375}},"wh":{"key":"Hormagaunts","fac":"tyranids","prof":{"M":"10\"","T":"3","Sv":"5+","W":"1","Ld":"8+","OC":"2"},"base":"28.5mm","w":[{"n":"Hormagaunt talons","r":"Melee","a":"3","s":"4+","S":"3","ap":"-1","d":"1"}],"core":"","p":{"dur":10.4,"fire":6.7,"reach":7.7,"mob":78.3,"foot":15.2},"m":{"dur":3.0,"fire":3.0,"reach":1.0,"mob":10.0,"foot":28.5}},"alt":null},{"id":"baneling-sporemine","race":"zerg","tier":"Munition","scName":"Baneling","whName":"Spore Mines","whFac":"Tyranids","verdict":"A living bomb that was once a soldier \u2014 or was never anything else.","body":["Both armies field a creature whose only action is to die usefully. The Baneling is a Zergling that has been re-grown around a sac of acid harvested from a native mould on Sorona; it rolls into a formation and bursts. Spore Mines drift across the battlefield and detonate on contact.","The difference is biography. The Baneling used to be a warrior and was converted \u2014 the Swarm recycles its own soldiers into ordnance. A Spore Mine was grown as ordnance and has no other history."],"conv":["Single-use area damage delivered by a living body","Both force the enemy to spread out, which is usually worth more than the kills","Both are cheap enough to use as a screen"],"div":["Spore Mines are T1 with a 7+ save \u2014 no save at all, the flimsiest datasheet in the game. A Baneling has 30 HP and must be actively killed","Banelings are steered by a player. Spore Mines drift"],"fact":"Baneling acid came from a native mould at the Dominion colony of Sorona, incorporated into zergling biology by the Swarm's evolution masters. The Tyranids would call that Tuesday.","score":{"role":22,"form":20,"doctrine":19,"mech":21},"total":82,"sc":{"key":"Baneling","hp":30.0,"sh":0,"ar":0.0,"sup":0.5,"min":50,"gas":25,"bt":14.3,"sp":2.5,"si":8.0,"rad":0.375,"attr":["Biological"],"fly":false,"w":[],"p":{"dur":0.0,"fire":null,"reach":null,"mob":50.0,"foot":10.0},"m":{"dur":30.0,"fire":null,"reach":null,"mob":2.5,"foot":0.375}},"wh":{"key":"Spore-Mines","fac":"tyranids","prof":{"M":"4\"","T":"1","Sv":"7+","W":"1","Ld":"8+","OC":"0"},"base":"25mm","w":[],"core":"Deep Strike","p":{"dur":0.0,"fire":null,"reach":null,"mob":0.9,"foot":3.3},"m":{"dur":1.0,"fire":null,"reach":null,"mob":4.0,"foot":25.0}},"alt":null},{"id":"roach-ravener","race":"zerg","tier":"Mid-tier","scName":"Roach","whName":"Raveners","whFac":"Tyranids","verdict":"Armour that travels underground.","body":["The Roach is the Swarm's durable middleweight: 145 HP behind 1 armour, an acid spit at range 4, notably fast regeneration, and \u2014 with Tunneling Claws \u2014 the ability to burrow and keep moving while submerged. Raveners are serpentine Tyranids built for exactly that: Deep Strike, subterranean arrival, and a body tough enough to survive the reception.","Both units exist because a swarm that can only approach along the ground is a swarm that can be walled off."],"conv":["Both arrive from underneath, which makes static defence unreliable","Both are the tier where a horde army first becomes hard to simply shoot down","Both recover or replace losses faster than the opponent expects"],"div":["Roach regeneration is continuous and is the unit's whole reputation. Raveners have no equivalent self-repair","The Roach is a ranged unit that burrows. The Ravener is a melee unit that burrows"],"fact":"Burrow-move is one of very few StarCraft mechanics with a direct rules-level cousin in 40K: both games needed an answer to the problem of a fortified line, and both went down.","score":{"role":21,"form":20,"doctrine":18,"mech":21},"total":80,"sc":{"key":"Roach","hp":145.0,"sh":0,"ar":1.0,"sup":2.0,"min":75,"gas":25,"bt":19.3,"sp":2.25,"si":9.0,"rad":0.5,"attr":["Armored","Biological"],"fly":false,"w":[{"t":"Ground","d":16.0,"a":1,"cd":2.0,"r":4.0,"dps":8.0,"b":[]}],"p":{"dur":47.3,"fire":44.6,"reach":31.1,"mob":34.5,"foot":25.5},"m":{"dur":145.0,"fire":8.0,"reach":4.0,"mob":2.25,"foot":0.5}},"wh":{"key":"Raveners","fac":"tyranids","prof":{"M":"10\"","T":"5","Sv":"4+","W":"3","Ld":"8+","OC":"1"},"base":"40mm","w":[{"n":"Ravener claws and talons twin-linked","r":"Melee","a":"3","s":"3+","S":"5","ap":"-2","d":"2"}],"core":"Deep Strike","p":{"dur":37.7,"fire":36.5,"reach":7.7,"mob":78.3,"foot":50.0},"m":{"dur":15.0,"fire":6.0,"reach":1.0,"mob":10.0,"foot":40.0}},"alt":null},{"id":"hydralisk-termagant","race":"zerg","tier":"Ranged swarm","scName":"Hydralisk","whName":"Termagants","whFac":"Tyranids","verdict":"Both hordes shoot. Only one of them shoots bullets that are alive.","body":["The Hydralisk is the Swarm's ranged backbone \u2014 evolved from the Slothien, a peaceful herbivore, crossed with seven or eight further strains into something 2.1 to 3.5 metres tall that launches grooved spines by muscular contraction at near-hypersonic velocity. It shoots air and ground with the same organ. Its jaw is estimated at 5,000 psi.","The Tyranid equivalent splits across two datasheets. Termagants carry the fleshborer \u2014 18\", S5 \u2014 which does not fire a projectile at all: it fires living beetles that burrow into the target. Tyranid Warriors with ranged bio-weapons provide the mass and the synapse. Between them they cover what one Hydralisk does."],"conv":["Body-mounted ranged weapons grown rather than manufactured","Both are the horde's answer to an enemy that refuses to close","Both are individually unimpressive and collectively lethal"],"div":["Fleshborer ammunition is parasitic and alive. Hydralisk spines are inert kinetic darts \u2014 the Zerg are ballistic, the Tyranids are infectious","The Hydralisk fires at aircraft. Tyranid anti-air is a different bioform entirely"],"fact":"The Hydralisk's origin species, the Slothien, was a docile herbivore. The Swarm's design philosophy is that anything can be made into a weapon, which is also the Hive Mind's \u2014 the difference is that the Zerg keep notes.","score":{"role":23,"form":19,"doctrine":21,"mech":20},"total":83,"sc":{"key":"Hydralisk","hp":90.0,"sh":0,"ar":0.0,"sup":2.0,"min":100,"gas":50,"bt":23.6,"sp":2.25,"si":9.0,"rad":0.625,"attr":["Light","Biological"],"fly":false,"w":[{"t":"Any","d":12.0,"a":1,"cd":0.825,"r":5.0,"dps":14.55,"b":[]}],"p":{"dur":22.7,"fire":86.5,"reach":43.2,"mob":34.5,"foot":40.9},"m":{"dur":90.0,"fire":14.55,"reach":5.0,"mob":2.25,"foot":0.625}},"wh":{"key":"Termagants","fac":"tyranids","prof":{"M":"6\"","T":"3","Sv":"5+","W":"1","Ld":"8+","OC":"2"},"base":"28.5mm","w":[{"n":"Fleshborer assault","r":"18\"","a":"1","s":"4+","S":"5","ap":"0","d":"1"},{"n":"Shardlauncher blast heavy","r":"18\"","a":"D3","s":"4+","S":"5","ap":"0","d":"1"},{"n":"Spike rifle heavy","r":"24\"","a":"1","s":"4+","S":"4","ap":"-1","d":"1"},{"n":"Strangleweb assault devastating wounds torrent","r":"18\"","a":"D6","s":"N/A","S":"2","ap":"0","d":"1"},{"n":"Termagant devourer","r":"18\"","a":"2","s":"4+","S":"4","ap":"0","d":"1"},{"n":"Termagant spinefists assault pistol twin-linked","r":"12\"","a":"2","s":"4+","S":"3","ap":"0","d":"1"},{"n":"Chitinous claws and teeth","r":"Melee","a":"1","s":"4+","S":"3","ap":"0","d":"1"}],"core":"","p":{"dur":10.4,"fire":10.6,"reach":58.7,"mob":23.6,"foot":15.2},"m":{"dur":3.0,"fire":3.5,"reach":24.0,"mob":6.0,"foot":28.5}},"alt":{"key":"Tyranid-Warriors-With-Ranged-Bio-weapons","fac":"tyranids","prof":{"M":"6\"","T":"5","Sv":"4+","W":"3","Ld":"7+","OC":"2"},"base":"50mm","w":[{"n":"Barbed strangler blast","r":"36\"","a":"D6+1","s":"4+","S":"6","ap":"-1","d":"1"},{"n":"Deathspitter","r":"24\"","a":"3","s":"4+","S":"5","ap":"-1","d":"1"},{"n":"Devourer","r":"18\"","a":"5","s":"4+","S":"4","ap":"0","d":"1"},{"n":"Spinefists assault pistol twin-linked","r":"12\"","a":"2","s":"4+","S":"4","ap":"0","d":"1"},{"n":"Venom cannon blast","r":"36\"","a":"D3","s":"4+","S":"9","ap":"-2","d":"2"},{"n":"Tyranid Warrior claws and talons","r":"Melee","a":"5","s":"3+","S":"5","ap":"-1","d":"1"}],"core":"","p":{"dur":37.7,"fire":19.2,"reach":75.0,"mob":23.6,"foot":65.2},"m":{"dur":15.0,"fire":5.0,"reach":36.0,"mob":6.0,"foot":50.0}}},{"id":"lurker-mawloc","race":"zerg","tier":"Ambush","scName":"Lurker","whName":"Mawloc","whFac":"Tyranids","verdict":"The ground itself as a weapon system.","body":["A Lurker only functions buried. Submerged, it is invisible without detection, and it attacks in a line out to range 8 \u2014 a wall of subterranean spines that makes an entire approach lane unusable. The Mawloc does the same job as a single violent event: it burrows, then erupts underneath a formation.","Both are terror weapons in the specific sense that they punish the assumption that empty ground is safe."],"conv":["Invisible until they attack; both require the enemy to invest in detection or scouting","Both hit formations rather than models","Both convert map control into damage without moving"],"div":["The Lurker is static area denial and stays put. The Mawloc submerges again and relocates","Lurker spines are a line through a crowd. The Mawloc's terror is vertical and local"],"fact":"Detection is StarCraft's answer to invisibility; 40K's answer is line of sight and the Deep Strike distance rule. Both are, at heart, a tax on the attacker's attention.","score":{"role":22,"form":21,"doctrine":20,"mech":20},"total":83,"sc":{"key":"LurkerMPBurrowed","hp":190.0,"sh":0,"ar":1.0,"sup":3.0,"min":150,"gas":150,"bt":1.9,"sp":null,"si":11.0,"rad":0.75,"attr":["Armored","Biological"],"fly":false,"w":[{"t":"Ground","d":20.0,"a":1,"cd":2.0,"r":8.0,"dps":10.0,"b":[["Armored",10.0]]}],"p":{"dur":70.0,"fire":59.5,"reach":86.5,"mob":1.8,"foot":57.3},"m":{"dur":190.0,"fire":10.0,"reach":8.0,"mob":0.0,"foot":0.75}},"wh":{"key":"Mawloc","fac":"tyranids","prof":{"M":"10\"","T":"10","Sv":"3+","W":"14","Ld":"8+","OC":"4"},"base":"120x92mm","w":[{"n":"Distensible jaw anti-infantry 4+ devastating wounds extra attacks","r":"Melee","a":"1","s":"3+","S":"5","ap":"0","d":"3"},{"n":"Mawloc scything talons","r":"Melee","a":"16","s":"3+","S":"8","ap":"-2","d":"1"}],"core":"Deep Strike","p":{"dur":90.6,"fire":86.5,"reach":7.7,"mob":78.3,"foot":94.6},"m":{"dur":140.0,"fire":16.0,"reach":1.0,"mob":10.0,"foot":105.1}},"alt":null},{"id":"infestor-zoanthrope","race":"zerg","tier":"Psychic","scName":"Infestor","whName":"Zoanthropes","whFac":"Tyranids","verdict":"Both hives grew a brain that floats. Only one takes prisoners.","body":["The Infestor carries the Psionic attribute, has no conventional attack, moves while burrowed, and wins fights by removing the opponent's ability to fight: Fungal Growth roots a formation in place, Neural Parasite takes an enemy unit and turns it against its owner. Zoanthropes are the Tyranid psychic caste \u2014 hovering, malformed brain-creatures that channel the Hive Mind into Warp Blast and shield the swarm.","Both are the moment their army stops being purely physical."],"conv":["Neither has a normal attack; both contribute control rather than damage","Both hover or glide rather than walk, and both are physically pathetic","Both are high-priority targets that the swarm bodies exist to screen"],"div":["Neural Parasite converts an enemy unit into a Zerg unit. The Tyranids do not convert \u2014 they consume","40K's true infestation analogue is the Genestealer Cult, which works over generations and does not appear as a Zerg mechanic at all"],"fact":"The Zerg and the Tyranids both solved 'psychic horde' the same way \u2014 a fragile floating specialist \u2014 but the Zerg's version is a recruiter and the Tyranids' is an artillery piece.","score":{"role":22,"form":21,"doctrine":22,"mech":19},"total":84,"sc":{"key":"Infestor","hp":90.0,"sh":0,"ar":0.0,"sup":2.0,"min":100,"gas":150,"bt":35.7,"sp":2.25,"si":10.0,"rad":0.625,"attr":["Armored","Biological","Psionic"],"fly":false,"w":[],"p":{"dur":22.7,"fire":null,"reach":null,"mob":34.5,"foot":40.9},"m":{"dur":90.0,"fire":null,"reach":null,"mob":2.25,"foot":0.625}},"wh":{"key":"Zoanthropes","fac":"tyranids","prof":{"M":"5\"","T":"5","Sv":"5+","W":"3","Ld":"7+","OC":"1"},"base":"40mm","w":[{"n":"Chitinous claws and teeth","r":"Melee","a":"2","s":"5+","S":"3","ap":"0","d":"1"}],"core":"","p":{"dur":37.7,"fire":2.9,"reach":7.7,"mob":6.6,"foot":50.0},"m":{"dur":15.0,"fire":2.0,"reach":1.0,"mob":5.0,"foot":40.0}},"alt":{"key":"Neurotyrant","fac":"tyranids","prof":{"M":"6\"","T":"8","Sv":"4+","W":"9","Ld":"7+","OC":"3"},"base":"50mm","w":[{"n":"Psychic scream ignores cover psychic torrent","r":"18\"","a":"2D6","s":"N/A","S":"5","ap":"-1","d":"2"},{"n":"Neurotyrant claws and lashes","r":"Melee","a":"6","s":"3+","S":"5","ap":"0","d":"1"}],"core":"Leader","p":{"dur":66.0,"fire":80.8,"reach":42.3,"mob":23.6,"foot":65.2},"m":{"dur":72.0,"fire":14.0,"reach":18.0,"mob":6.0,"foot":50.0}}},{"id":"swarmhost-tervigon","race":"zerg","tier":"Spawner","scName":"Swarm Host","whName":"Tervigon","whFac":"Tyranids","verdict":"A unit whose weapon is more units \u2014 and everyone hates it.","body":["The Swarm Host never attacks. It periodically spawns free Locusts that fly forward, attack, and expire. The Tervigon never needed to attack either: its defining contribution is putting destroyed Termagant models back into a brood, endlessly, for free.","Both are pure attrition engines, and both have the same reputation among opponents for the same reason: you cannot win the exchange, because there was no exchange. The resource was never spent."],"conv":["An immobile-ish body that manufactures disposable attackers on a timer","Both win by making time, not space, the contested resource","Both are widely considered the least fun thing in their respective game"],"div":["Locusts expire on a timer and cannot be kept. Replenished Termagants are permanent","The Tervigon is a genuine monster in its own right \u2014 120x92mm base, Deadly Demise D6. The Swarm Host is a 160 HP nest that runs away"],"fact":"Of all 36 pairings here, this is the one where the *design intent* matches most exactly: both were built to answer 'what if a unit's output were other units,' and both required repeated balance intervention.","score":{"role":24,"form":22,"doctrine":23,"mech":25},"total":94,"sc":{"key":"SwarmHostMP","hp":160.0,"sh":0,"ar":1.0,"sup":3.0,"min":100,"gas":75,"bt":28.6,"sp":2.25,"si":10.0,"rad":0.8125,"attr":["Armored","Biological"],"fly":false,"w":[],"p":{"dur":56.4,"fire":null,"reach":null,"mob":34.5,"foot":67.3},"m":{"dur":160.0,"fire":null,"reach":null,"mob":2.25,"foot":0.8125}},"wh":{"key":"Tervigon","fac":"tyranids","prof":{"M":"8\"","T":"11","Sv":"2+","W":"16","Ld":"7+","OC":"5"},"base":"120x92mm","w":[{"n":"Stinger salvoes","r":"24\"","a":"8","s":"3+","S":"5","ap":"0","d":"1"},{"n":"Massive crushing claws","r":"Melee","a":"4","s":"4+","S":"12","ap":"-3","d":"D6+1"}],"core":"Deadly Demise D6","p":{"dur":96.2,"fire":90.4,"reach":58.7,"mob":57.5,"foot":94.6},"m":{"dur":176.0,"fire":18.0,"reach":24.0,"mob":8.0,"foot":105.1}},"alt":null},{"id":"mutalisk-gargoyle","race":"zerg","tier":"Air swarm","scName":"Mutalisk","whName":"Gargoyles","whFac":"Tyranids","verdict":"Cheap wings that go around the problem.","body":["Winged, cheap, fast, and used in flocks rather than individually. The Mutalisk at 4.0 movement is the quickest unit in StarCraft II and its glaive wurm bounces to three targets, which makes a flock disproportionately dangerous to anything clustered. Gargoyles fly 12\", Deep Strike, carry fleshborers, and exist to be somewhere the enemy did not want a Tyranid to be.","Both are the horde's answer to the fact that ground is a solvable problem and air is not."],"conv":["Cheap flying swarm bodies used for harassment and map pressure","Both die instantly to dedicated anti-air and both are worth it anyway","Both let a swarm army threaten two places at once"],"div":["The glaive wurm's three-target bounce has no counterpart in 40K's targeting rules","Gargoyles are primarily a screen and an objective-grabber. Mutalisks are a raiding weapon"],"fact":"A Mutalisk flock is the reason Terran players build turrets in their mineral lines. 40K has no economy to raid, so Gargoyles get pointed at objectives instead.","score":{"role":22,"form":23,"doctrine":19,"mech":18},"total":82,"sc":{"key":"Mutalisk","hp":120.0,"sh":0,"ar":0.0,"sup":2.0,"min":100,"gas":100,"bt":23.6,"sp":4.0,"si":11.0,"rad":0.5,"attr":["Light","Biological"],"fly":true,"w":[{"t":"Any","d":9.0,"a":1,"cd":1.525,"r":3.0,"dps":5.9,"b":[]}],"p":{"dur":31.8,"fire":21.6,"reach":25.7,"mob":93.6,"foot":25.5},"m":{"dur":120.0,"fire":5.9,"reach":3.0,"mob":4.0,"foot":0.5}},"wh":{"key":"Gargoyles","fac":"tyranids","prof":{"M":"12\"","T":"3","Sv":"6+","W":"1","Ld":"8+","OC":"2"},"base":null,"w":[{"n":"Fleshborer assault","r":"18\"","a":"1","s":"4+","S":"5","ap":"0","d":"1"},{"n":"Blinding venom","r":"Melee","a":"1","s":"4+","S":"3","ap":"0","d":"1"}],"core":"Deep Strike","p":{"dur":10.4,"fire":0.0,"reach":42.3,"mob":91.5,"foot":null},"m":{"dur":3.0,"fire":1.0,"reach":18.0,"mob":12.0,"foot":null}},"alt":null},{"id":"ultralisk-carnifex","race":"zerg","tier":"Monster","scName":"Ultralisk","whName":"Carnifex","whFac":"Tyranids","verdict":"Both fictions independently coined 'living battering ram'.","body":["The Ultralisk is 20 metres long and 5 metres tall, carries kaiser blades that shear through most materials, and has a gene whose sole purpose is to grow armoured duplicates of its vital organs at random points in its body so that hitting the right spot stops meaning anything. It evolved from the brontolith, a docile herbivore whose immune system the Swarm kept.","The Carnifex is described in its own lore as an organic battering ram and as the Tyranid equivalent of a Space Marine Dreadnought: T9, a 2+ save, crushing claws at S12 AP-3 for D6+1 damage, on a 105x70mm base. Both are the point where a horde army stops relying on numbers."],"conv":["Both are their army's living siege engine and both are described in-universe as battering rams","Blade-armed, armoured past the point where small arms matter, and expensive enough to change a game plan","Both have documented weak points their own factions' enemies obsess over"],"div":["Scale: 20 metres against roughly four. The Ultralisk is a kaiju; the Carnifex is a very large monster","Carnifexes mount ranged bio-weapons \u2014 venom cannons, stranglethorns, bio-plasma. The Ultralisk has never fired anything"],"fact":"The Ultralisk's redundant-organ gene is one of the most quietly horrifying details in StarCraft's bestiary: it is a creature engineered so that anatomy itself is a decoy.","score":{"role":24,"form":20,"doctrine":24,"mech":21},"total":89,"sc":{"key":"Ultralisk","hp":500.0,"sh":0,"ar":2.0,"sup":6.0,"min":275,"gas":200,"bt":39.3,"sp":2.953125,"si":9.0,"rad":1.0,"attr":["Armored","Biological","Massive"],"fly":false,"w":[{"t":"Ground","d":35.0,"a":1,"cd":0.86,"r":1.0,"dps":40.69,"b":[]}],"p":{"dur":96.4,"fire":97.3,"reach":16.2,"mob":80.0,"foot":83.6},"m":{"dur":500.0,"fire":40.69,"reach":1.0,"mob":2.953125,"foot":1.0}},"wh":{"key":"Carnifexes","fac":"tyranids","prof":{"M":"8\"","T":"9","Sv":"2+","W":"8","Ld":"8+","OC":"3"},"base":"105x70mm","w":[{"n":"Bio-plasma assault blast","r":"12\"","a":"D3","s":"4+","S":"7","ap":"-2","d":"1"},{"n":"Deathspitters with slimer maggots","r":"24\"","a":"6","s":"4+","S":"7","ap":"-2","d":"1"},{"n":"Devourers with brainleech worms","r":"18\"","a":"12","s":"4+","S":"6","ap":"0","d":"1"},{"n":"Heavy venom cannon blast","r":"36\"","a":"D3","s":"4+","S":"9","ap":"-2","d":"3"},{"n":"Spine banks assault","r":"6\"","a":"5","s":"4+","S":"5","ap":"0","d":"1"},{"n":"Stranglethorn cannon blast","r":"36\"","a":"D6+1","s":"4+","S":"7","ap":"-1","d":"2"},{"n":"Carnifex crushing claws","r":"Melee","a":"4","s":"4+","S":"12","ap":"-3","d":"D6+1"},{"n":"Carnifex extra scything talons extra attacks","r":"Melee","a":"2","s":"4+","S":"9","ap":"-2","d":"3"},{"n":"Carnifex scything talons","r":"Melee","a":"6","s":"4+","S":"9","ap":"-2","d":"3"},{"n":"Chitinous claws and teeth","r":"Melee","a":"4","s":"4+","S":"6","ap":"0","d":"1"}],"core":"Deadly Demise 1","p":{"dur":66.0,"fire":90.4,"reach":75.0,"mob":57.5,"foot":80.4},"m":{"dur":72.0,"fire":18.0,"reach":36.0,"mob":8.0,"foot":85.7}},"alt":{"key":"Screamer-killer","fac":"tyranids","prof":{"M":"8\"","T":"9","Sv":"2+","W":"10","Ld":"8+","OC":"3"},"base":"90mm","w":[{"n":"Bio-plasmic scream assault blast","r":"18\"","a":"D6+3","s":"4+","S":"8","ap":"-2","d":"1"},{"n":"Screamer-killer talons","r":"Melee","a":"10","s":"3+","S":"10","ap":"-2","d":"3"}],"core":"Deadly Demise 1","p":{"dur":69.8,"fire":98.1,"reach":42.3,"mob":57.5,"foot":84.8},"m":{"dur":90.0,"fire":30.0,"reach":18.0,"mob":8.0,"foot":90.0}}},{"id":"queen-hivetyrant","race":"zerg","tier":"Command","scName":"Queen","whName":"Hive Tyrant","whFac":"Tyranids","verdict":"The hive's local voice \u2014 not its actual queen.","body":["StarCraft's Queen is a tethered commander: she injects larvae into a hatchery, heals damaged Zerg, spreads creep, and moves at 0.94 off it \u2014 practically immobile away from the hive's carpet. The Hive Tyrant is the Hive Mind's battlefield avatar, a synapse creature that makes everything around it function better and coordinates the brood.","The true parallel to the Tyranid Norn-Queen is not this unit at all: it is the Overmind, and later Kerrigan \u2014 a being that never appears on a tabletop and whose death is a plot event rather than a casualty."],"conv":["A mid-sized monster that improves everything nearby rather than fighting alone","Both are the local expression of a distant, larger intelligence","Both are why a swarm behaves like an army instead of a mob"],"div":["The Queen's speed collapses off creep. A Hive Tyrant moves at a constant 8\" regardless of terrain","Norn-Queens are lore-only. The Zerg put their equivalent on the map and let you kill it"],"fact":"Queens are bound to creep the way Tyranids are bound to synapse \u2014 in both universes, the horde's leadership is the part that cannot improvise.","score":{"role":21,"form":18,"doctrine":23,"mech":19},"total":81,"sc":{"key":"Queen","hp":175.0,"sh":0,"ar":1.0,"sup":2.0,"min":175,"gas":0,"bt":35.7,"sp":0.9375,"si":9.0,"rad":0.875,"attr":["Biological","Psionic"],"fly":false,"w":[{"t":"Air","d":9.0,"a":1,"cd":1.0,"r":7.0,"dps":9.0,"b":[]},{"t":"Ground","d":4.0,"a":2,"cd":1.0,"r":5.0,"dps":8.0,"b":[]}],"p":{"dur":61.8,"fire":50.0,"reach":79.7,"mob":7.3,"foot":70.9},"m":{"dur":175.0,"fire":9.0,"reach":7.0,"mob":0.9375,"foot":0.875}},"wh":{"key":"Hive-Tyrant","fac":"tyranids","prof":{"M":"8\"","T":"10","Sv":"2+","W":"10","Ld":"7+","OC":"3"},"base":"60mm","w":[{"n":"Heavy venom cannon blast","r":"36\"","a":"D3","s":"2+","S":"9","ap":"-2","d":"3"},{"n":"Stranglethorn cannon blast","r":"36\"","a":"D6+1","s":"2+","S":"7","ap":"-1","d":"2"},{"n":"Monstrous bonesword and lash whip twin-linked","r":"Melee","a":"6","s":"2+","S":"9","ap":"-2","d":"3"},{"n":"Monstrous scything talons extra attacks","r":"Melee","a":"4","s":"2+","S":"7","ap":"-2","d":"2"}],"core":"","p":{"dur":76.4,"fire":90.4,"reach":75.0,"mob":57.5,"foot":72.8},"m":{"dur":100.0,"fire":18.0,"reach":36.0,"mob":8.0,"foot":60.0}},"alt":null},{"id":"nydus-trygon","race":"zerg","tier":"Infiltration","scName":"Nydus Worm","whName":"Trygon","whFac":"Tyranids","verdict":"An entire army arriving from underneath.","body":["The Nydus Worm is not really a unit; it is a door. Build the network, and any Zerg force can surface anywhere the Swarm has vision, one body at a time, with an audible scream as the only warning. The Trygon is 40K's version of the same nightmare: a Deep Striking subterranean monster that in several editions opened a tunnel other Tyranid units could follow.","Both mechanics exist to answer the same question \u2014 what happens to fortification when the enemy simply does not use the surface."],"conv":["Subterranean arrival that ignores the front line entirely","Both make walls and chokepoints negotiable rather than decisive","Both are announced by the ground itself"],"div":["A Nydus Worm is permanent infrastructure and can be destroyed in place. A Trygon is a creature that arrives once","Nydus is a two-way transport network; Trygon arrival is one-way"],"fact":"The Nydus Worm's emergence sound was deliberately made audible to the enemy. Like the nuke and the Deep Strike bubble, it is a mechanic balanced by warning the victim.","score":{"role":23,"form":19,"doctrine":21,"mech":22},"total":85,"sc":{"key":"NydusCanal","hp":300.0,"sh":0,"ar":1.0,"sup":0.0,"min":75,"gas":75,"bt":14.3,"sp":null,"si":10.0,"rad":1.125,"attr":["Armored","Biological","Structure"],"fly":false,"w":[],"p":{"dur":85.5,"fire":null,"reach":null,"mob":1.8,"foot":93.6},"m":{"dur":300.0,"fire":null,"reach":null,"mob":0.0,"foot":1.125}},"wh":{"key":"Trygon","fac":"tyranids","prof":{"M":"10\"","T":"10","Sv":"3+","W":"14","Ld":"8+","OC":"4"},"base":"120x92mm","w":[{"n":"Bio-electric pulse sustained hits 2","r":"12\"","a":"6","s":"3+","S":"5","ap":"0","d":"1"},{"n":"Trygon scything talons","r":"Melee","a":"12","s":"3+","S":"9","ap":"-2","d":"3"}],"core":"Deep Strike","p":{"dur":90.6,"fire":100.0,"reach":26.0,"mob":78.3,"foot":94.6},"m":{"dur":140.0,"fire":36.0,"reach":12.0,"mob":10.0,"foot":105.1}},"alt":null},{"id":"probe-bonesinger","race":"protoss","tier":"Labour","scName":"Probe","whName":"Bonesinger","whFac":"Aeldari (no 10th-ed datasheet)","verdict":"Neither faction builds. Both of them grow.","body":["A Probe does not construct anything. It opens a warp rift, the structure arrives already finished, and the Probe leaves \u2014 the only worker in StarCraft that is not tied up by the act of building. Aeldari construction is the same trick performed by a different discipline: a Bonesinger psychically sings wraithbone into shape, growing hulls, halls and weapons out of a psycho-plastic material rather than assembling them.","Both civilisations treat manufacture as an act of will applied at a distance, and both are the only major factions in their game to do so."],"conv":["Structures appear rather than being built; the worker is not consumed or occupied","Both are non-combatants in armies that otherwise have no non-combatants","Both express the same idea: an advanced species does not hammer things together"],"div":["There is no Bonesinger datasheet in 10th edition \u2014 this pairing is lore-to-lore and is flagged as such","Wraithbone is grown slowly, over centuries, by artisans. Protoss warp-in takes seconds and is industrial"],"fact":"Of the three StarCraft workers, only the Probe survives its own construction process \u2014 a small mechanical detail that encodes an entire civilisation's relationship with matter.","score":{"role":21,"form":13,"doctrine":24,"mech":10},"total":68,"sc":{"key":"Probe","hp":20.0,"sh":20.0,"ar":0.0,"sup":1.0,"min":50,"gas":0,"bt":12.1,"sp":2.8125,"si":8.0,"rad":0.375,"attr":["Light","Mechanical"],"fly":false,"w":[{"t":"Ground","d":5.0,"a":1,"cd":1.5,"r":0.199951171875,"dps":3.33,"b":[]}],"p":{"dur":4.5,"fire":9.5,"reach":10.8,"mob":67.3,"foot":10.0},"m":{"dur":40.0,"fire":3.33,"reach":0.199951171875,"mob":2.8125,"foot":0.375}},"wh":null,"alt":null},{"id":"zealot-banshee","race":"protoss","tier":"Melee elite","scName":"Zealot","whName":"Howling Banshees","whFac":"Aeldari","verdict":"Trained for decades to cross the last twenty metres.","body":["Zealots are trained for decades in hand-to-hand combat, pain tolerance and martial discipline, and fight with paired psi-blades that grow stronger as the wielder's fury rises. They have a limited precognition that lets them read an enemy's movement. Howling Banshees are Aspect Warriors who have taken the Path of the Warrior in its swiftest form: M8\", Fights First as a core ability, banshee blades at S4 AP-2 with Anti-Infantry 3+, and a psychosonic mask that freezes a victim in the instant before contact.","Both are elite melee specialists whose entire problem is distance, and both armies solved it by making them strike first."],"conv":["Melee specialists in a caste army, trained over a lifetime rather than recruited","Both get a rules-level advantage on the charge \u2014 Zealot Charge, Banshee Fights First","Both are psychically enhanced without being psykers in the support sense"],"div":["The Zealot is the Protoss *baseline* unit; Howling Banshees are a rare Aspect shrine's elite","Plasma shields regenerate between fights. A Banshee's 4+ save and one wound do not"],"fact":"Striking Scorpions \u2014 a 3+ save and mandiblasters \u2014 are the tankier half of the comparison. The Aeldari split 'melee specialist' into six Aspects; the Protoss put it all in one unit and built an army around it.","score":{"role":23,"form":20,"doctrine":22,"mech":23},"total":88,"sc":{"key":"Zealot","hp":100.0,"sh":50.0,"ar":1.0,"sup":2.0,"min":100,"gas":0,"bt":27.1,"sp":2.25,"si":9.0,"rad":0.5,"attr":["Light","Biological"],"fly":false,"w":[{"t":"Ground","d":8.0,"a":2,"cd":1.2,"r":0.10009765625,"dps":13.33,"b":[]}],"p":{"dur":50.9,"fire":75.7,"reach":2.7,"mob":34.5,"foot":25.5},"m":{"dur":150.0,"fire":13.33,"reach":0.10009765625,"mob":2.25,"foot":0.5}},"wh":{"key":"Howling-Banshees","fac":"aeldari","prof":{"M":"8\"","T":"3","Sv":"4+","W":"1","Ld":"6+","OC":"1"},"base":"28.5mm","w":[{"n":"Shuriken pistol assault pistol","r":"12\"","a":"1","s":"3+","S":"4","ap":"-1","d":"1"},{"n":"Triskele anti-infantry 3+ assault","r":"12\"","a":"3","s":"3+","S":"3","ap":"-1","d":"1"},{"n":"Banshee blade anti-infantry 3+","r":"Melee","a":"2","s":"2+","S":"4","ap":"-2","d":"2"},{"n":"Executioner anti-infantry 3+","r":"Melee","a":"3","s":"2+","S":"6","ap":"-3","d":"3"},{"n":"Mirrorswords anti-infantry 3+","r":"Melee","a":"4","s":"2+","S":"4","ap":"-2","d":"2"},{"n":"Triskele anti-infantry 3+","r":"Melee","a":"6","s":"2+","S":"3","ap":"-1","d":"1"}],"core":"Fights First","p":{"dur":10.4,"fire":64.4,"reach":26.0,"mob":57.5,"foot":15.2},"m":{"dur":3.0,"fire":9.0,"reach":12.0,"mob":8.0,"foot":28.5}},"alt":{"key":"Striking-Scorpions","fac":"aeldari","prof":{"M":"7\"","T":"3","Sv":"3+","W":"1","Ld":"6+","OC":"1"},"base":"28.5mm","w":[{"n":"Chainsabres assault pistol twin-linked","r":"12\"","a":"1","s":"3+","S":"4","ap":"-1","d":"1"},{"n":"Shuriken pistol assault pistol","r":"12\"","a":"1","s":"3+","S":"4","ap":"-1","d":"1"},{"n":"Biting blade sustained hits 1","r":"Melee","a":"4","s":"3+","S":"6","ap":"-3","d":"1"},{"n":"Chainsabres sustained hits 1 twin-linked","r":"Melee","a":"5","s":"3+","S":"4","ap":"-1","d":"1"},{"n":"Scorpion chainsword sustained hits 1","r":"Melee","a":"4","s":"3+","S":"4","ap":"-1","d":"1"},{"n":"Scorpion\u2019s claw","r":"Melee","a":"3","s":"3+","S":"8","ap":"-2","d":"2"}],"core":"","p":{"dur":10.4,"fire":36.5,"reach":26.0,"mob":42.5,"foot":15.2},"m":{"dur":3.0,"fire":6.0,"reach":12.0,"mob":7.0,"foot":28.5}}},{"id":"stalker-wraithguard","race":"protoss","tier":"Ghost warrior","scName":"Stalker","whName":"Wraithguard","whFac":"Aeldari","verdict":"A dead warrior's soul, poured into a machine, by their own consent.","body":["The Stalker is a Nerazim war machine controlled by the shadow-essence of a Dark Templar warrior fused into a metal body through a Void-powered ritual \u2014 undertaken voluntarily, often by warriors who simply wanted to keep hunting. It stands roughly twice as tall as a terran in CMC armour.","Wraithguard are not living warriors. Each is a wraithbone construct animated by a spirit stone holding the soul of an elite Aeldari drawn back out of a craftworld's Infinity Circuit, and they perceive realspace only through the Warp \u2014 'wraithsight' \u2014 which sometimes leaves them blind and stranded. Two civilisations, both with a soul problem, both reaching the same solution: the dead keep fighting."],"conv":["A soul housed in a constructed body, in both cases with the original warrior's consent","Both exist because their species cannot afford to lose more living bodies","Both perceive the battlefield through something other than ordinary sight"],"div":["Blink is a short-range teleport \u2014 the Stalker moves through space. The wraithcannon opens a hole *into* the Warp and drags the target through it (S14, AP-4)","Wraithguard are led by Warlocks because they get lost. Stalkers need no handler"],"fact":"The wraithcannon is 18\" and S14 \u2014 one of the highest Strength values in the game on an infantry model. The Stalker's particle disruptor is a modest 13 damage. Same premise, opposite balance philosophy.","score":{"role":24,"form":22,"doctrine":25,"mech":20},"total":91,"sc":{"key":"Stalker","hp":80.0,"sh":80.0,"ar":1.0,"sup":2.0,"min":125,"gas":50,"bt":27.1,"sp":2.953125,"si":10.0,"rad":0.625,"attr":["Armored","Mechanical"],"fly":false,"w":[{"t":"Any","d":13.0,"a":1,"cd":1.87,"r":6.0,"dps":6.95,"b":[["Armored",5.0]]}],"p":{"dur":56.4,"fire":29.7,"reach":63.5,"mob":80.0,"foot":40.9},"m":{"dur":160.0,"fire":6.95,"reach":6.0,"mob":2.953125,"foot":0.625}},"wh":{"key":"Wraithguard","fac":"aeldari","prof":{"M":"6\"","T":"6","Sv":"2+","W":"3","Ld":"8+","OC":"1"},"base":"40mm","w":[{"n":"Wraithcannon","r":"18\"","a":"1","s":"4+","S":"14","ap":"-4","d":"D6+1"},{"n":"D-scythe torrent","r":"12\"","a":"D6","s":"N/A","S":"7","ap":"-3","d":"1"},{"n":"Close combat weapon","r":"Melee","a":"3","s":"4+","S":"5","ap":"0","d":"1"}],"core":"","p":{"dur":53.8,"fire":17.3,"reach":42.3,"mob":23.6,"foot":50.0},"m":{"dur":18.0,"fire":4.5,"reach":18.0,"mob":6.0,"foot":40.0}},"alt":{"key":"Wraithblades","fac":"aeldari","prof":{"M":"6\"","T":"6","Sv":"2+","W":"3","Ld":"8+","OC":"1"},"base":"40mm","w":[{"n":"Ghostaxe","r":"Melee","a":"3","s":"4+","S":"7","ap":"-2","d":"2"},{"n":"Ghostswords","r":"Melee","a":"5","s":"4+","S":"5","ap":"-2","d":"2"}],"core":"","p":{"dur":53.8,"fire":70.2,"reach":7.7,"mob":23.6,"foot":50.0},"m":{"dur":18.0,"fire":10.0,"reach":1.0,"mob":6.0,"foot":40.0}}},{"id":"dragoon-dreadnought","race":"protoss","tier":"Interred hero","scName":"Dragoon / Immortal","whName":"Space Marine Dreadnought","whFac":"Space Marines","verdict":"The single closest idea in both universes \u2014 and it crosses the faction lines.","body":["A Dragoon is a mortally wounded Protoss warrior transplanted into the core of a walking exoskeleton and submerged in fluid; catastrophic damage breaches the tank and spills the occupant. A shrine on Aiur was dedicated to building and maintaining them, and when Aiur fell the knowledge went with it \u2014 no new Dragoons have been made since, and the survivors were upgraded into Immortals to preserve their numbers.","A Space Marine Dreadnought is a mortally wounded veteran interred in an amniotic sarcophagus inside a walking war machine, venerated as a relic, woken only for war, and effectively irreplaceable because the techniques to build new chassis are largely lost. The premise is not similar. It is the same premise."],"conv":["A dying hero, preserved inside a walking sarcophagus, so the army does not lose them","Both are venerated relics whose construction knowledge has been lost to their own civilisation","Both were repurposed into a later, tougher model when the originals could not be replaced"],"div":["Dreadnoughts sleep between wars and are woken with ritual. Dragoons are always awake \u2014 which their own lore treats as a cruelty","This is the one pairing whose best counterpart sits outside the 'assigned' faction: the closest thing to a Protoss Dragoon in 40K is an Imperial unit"],"fact":"Immortals in StarCraft are Dragoons crippled beyond repair and rebuilt with hardened shields \u2014 a second interment for a soldier who has already died once. The Necrons also field a unit called Immortals, which is a coincidence of naming and nothing more.","score":{"role":25,"form":23,"doctrine":25,"mech":21},"total":94,"sc":{"key":"Immortal","hp":200.0,"sh":100.0,"ar":1.0,"sup":4.0,"min":250,"gas":100,"bt":39.3,"sp":2.25,"si":9.0,"rad":0.75,"attr":["Armored","Mechanical"],"fly":false,"w":[{"t":"Ground","d":20.0,"a":1,"cd":1.6,"r":6.0,"dps":12.5,"b":[["Armored",30.0]]}],"p":{"dur":85.5,"fire":70.3,"reach":63.5,"mob":34.5,"foot":57.3},"m":{"dur":300.0,"fire":12.5,"reach":6.0,"mob":2.25,"foot":0.75}},"wh":{"key":"Dreadnought","fac":"space-marines","prof":{"M":"6\"","T":"9","Sv":"2+","W":"8","Ld":"6+","OC":"3"},"base":"90mm","w":[{"n":"Assault cannon devastating wounds","r":"24\"","a":"6","s":"3+","S":"6","ap":"0","d":"1"},{"n":"Heavy flamer ignores cover torrent","r":"12\"","a":"D6","s":"N/A","S":"5","ap":"-1","d":"1"},{"n":"Multi-melta melta 2","r":"18\"","a":"2","s":"3+","S":"9","ap":"-4","d":"D6"},{"n":"Storm bolter rapid fire 2","r":"24\"","a":"2","s":"3+","S":"4","ap":"0","d":"1"},{"n":"Twin lascannon twin-linked","r":"48\"","a":"1","s":"3+","S":"12","ap":"-3","d":"D6+1"},{"n":"Close combat weapon","r":"Melee","a":"5","s":"3+","S":"6","ap":"0","d":"1"},{"n":"Dreadnought combat weapon","r":"Melee","a":"5","s":"3+","S":"12","ap":"-2","d":"3"}],"core":"Deadly Demise D3","p":{"dur":66.0,"fire":83.7,"reach":89.4,"mob":23.6,"foot":84.8},"m":{"dur":72.0,"fire":15.0,"reach":48.0,"mob":6.0,"foot":90.0}},"alt":{"key":"Redemptor-Dreadnought","fac":"space-marines","prof":{"M":"8\"","T":"10","Sv":"2+","W":"12","Ld":"6+","OC":"4"},"base":"90mm","w":[{"n":"Heavy flamer ignores cover torrent","r":"12\"","a":"D6","s":"N/A","S":"5","ap":"-1","d":"1"},{"n":"Heavy onslaught gatling cannon devastating wounds","r":"24\"","a":"12","s":"3+","S":"6","ap":"0","d":"1"},{"n":"Icarus rocket pod anti-fly 2+","r":"24\"","a":"D3","s":"3+","S":"8","ap":"-1","d":"2"},{"n":"Onslaught gatling cannon devastating wounds","r":"24\"","a":"8","s":"3+","S":"5","ap":"0","d":"1"},{"n":"Twin fragstorm grenade launcher blast twin-linked","r":"18\"","a":"D6","s":"3+","S":"4","ap":"0","d":"1"},{"n":"Twin storm bolter rapid fire 2 twin-linked","r":"24\"","a":"2","s":"3+","S":"4","ap":"0","d":"1"},{"n":"Redemptor fist","r":"Melee","a":"5","s":"3+","S":"12","ap":"-2","d":"3"}],"core":"Deadly Demise D3","p":{"dur":84.9,"fire":83.7,"reach":58.7,"mob":57.5,"foot":84.8},"m":{"dur":120.0,"fire":15.0,"reach":24.0,"mob":8.0,"foot":90.0}}},{"id":"immortal-wraithlord","race":"protoss","tier":"Anti-armour walker","scName":"Immortal","whName":"Wraithlord","whFac":"Aeldari","verdict":"The honoured dead, promoted.","body":["Where the Wraithguard is a rank-and-file ghost warrior, the Wraithlord is one of the greatest \u2014 a larger wraithbone body housing a hero's spirit stone, T10 with a 2+ save and 10 wounds, built to kill vehicles. The Immortal is the Protoss equivalent by a different route: a Dragoon too damaged to continue, rebuilt around hardened shields that blunt any single large hit, and armed with phase disruptors that do 20 damage \u2014 plus 30 more against Armored targets.","Both are their army's answer to heavy armour, and both are constructed around a person who has already given everything once."],"conv":["Anti-armour specialists built from a previously fallen warrior","Both are tough out of proportion to their size because of an unusual defensive mechanism","Both are the unit an opponent's tanks are specifically afraid of"],"div":["The Immortal's Barrier caps incoming damage per hit, punishing big single shots. 40K's save system has no equivalent damage cap on infantry-scale models","The Wraithlord is a lone monster; Immortals are built in numbers"],"fact":"The Immortal's +30 damage against Armored is the largest flat damage bonus in StarCraft II \u2014 a unit engineered to make one specific enemy decision wrong.","score":{"role":21,"form":21,"doctrine":22,"mech":20},"total":84,"sc":{"key":"Immortal","hp":200.0,"sh":100.0,"ar":1.0,"sup":4.0,"min":250,"gas":100,"bt":39.3,"sp":2.25,"si":9.0,"rad":0.75,"attr":["Armored","Mechanical"],"fly":false,"w":[{"t":"Ground","d":20.0,"a":1,"cd":1.6,"r":6.0,"dps":12.5,"b":[["Armored",30.0]]}],"p":{"dur":85.5,"fire":70.3,"reach":63.5,"mob":34.5,"foot":57.3},"m":{"dur":300.0,"fire":12.5,"reach":6.0,"mob":2.25,"foot":0.75}},"wh":{"key":"Wraithlord","fac":"aeldari","prof":{"M":"8\"","T":"10","Sv":"2+","W":"10","Ld":"8+","OC":"3"},"base":"60mm","w":[{"n":"Bright lance","r":"36\"","a":"1","s":"4+","S":"12","ap":"-3","d":"D6+2"},{"n":"Flamer assault ignores cover torrent","r":"12\"","a":"D6","s":"N/A","S":"4","ap":"0","d":"1"},{"n":"Scatter laser sustained hits 1","r":"36\"","a":"6","s":"4+","S":"5","ap":"0","d":"1"},{"n":"Shuriken cannon lethal hits","r":"24\"","a":"3","s":"4+","S":"6","ap":"-1","d":"2"},{"n":"Shuriken catapult assault","r":"18\"","a":"2","s":"4+","S":"4","ap":"-1","d":"1"},{"n":"Starcannon","r":"36\"","a":"2","s":"4+","S":"8","ap":"-3","d":"2"},{"n":"Wraithbone fists","r":"Melee","a":"4","s":"4+","S":"7","ap":"-2","d":"2"}],"core":"Deadly Demise 1","p":{"dur":76.4,"fire":59.6,"reach":75.0,"mob":57.5,"foot":72.8},"m":{"dur":100.0,"fire":8.0,"reach":36.0,"mob":8.0,"foot":60.0}},"alt":{"key":"Immortals","fac":"necrons","prof":{"M":"5\"","T":"5","Sv":"3+","W":"1","Ld":"7+","OC":"2"},"base":"32mm","w":[{"n":"Gauss blaster lethal hits","r":"24\"","a":"2","s":"3+","S":"5","ap":"-1","d":"1"},{"n":"Tesla carbine assault sustained hits 2","r":"24\"","a":"2","s":"3+","S":"5","ap":"0","d":"1"},{"n":"Close combat weapon","r":"Melee","a":"2","s":"3+","S":"4","ap":"0","d":"1"}],"core":"","p":{"dur":20.8,"fire":2.9,"reach":58.7,"mob":6.6,"foot":31.5},"m":{"dur":5.0,"fire":2.0,"reach":24.0,"mob":5.0,"foot":32.0}}},{"id":"sentry-warlock","race":"protoss","tier":"Support caster","scName":"Sentry","whName":"Warlock","whFac":"Aeldari","verdict":"Small, fragile, and the reason the line holds.","body":["The Sentry is a robotic support construct with 40 health and 40 shields that never wins a fight on its own. It projects Guardian Shield, which reduces incoming ranged damage for everything nearby, drops impassable Force Fields to cut an enemy army in half, and fakes an army with Hallucination.","The Warlock is the Aeldari version: a Seer who has stepped off the Path to fight, attached to a squad, spending psychic power on protection and misdirection. Both are the model that makes the unit next to them survivable, and both fold instantly if reached."],"conv":["A fragile attached specialist whose output is other units' survival","Both manipulate the battlefield's shape rather than its casualty count","Both are the first thing a competent opponent tries to snipe"],"div":["Force Field creates physical terrain out of nothing \u2014 40K has no way to add impassable terrain mid-battle","The Sentry is an AI construct with no will. The Warlock is a person who has chosen a path that will eventually consume them"],"fact":"Force Field is the rare StarCraft ability that creates *geometry* rather than damage \u2014 the closest 40K comes is a Warlock's protective runes, and the comparison flatters neither.","score":{"role":22,"form":17,"doctrine":20,"mech":21},"total":80,"sc":{"key":"Sentry","hp":40.0,"sh":40.0,"ar":1.0,"sup":2.0,"min":50,"gas":100,"bt":22.9,"sp":2.5,"si":10.0,"rad":0.5,"attr":["Mechanical","Psionic"],"fly":false,"w":[],"p":{"dur":16.4,"fire":null,"reach":null,"mob":50.0,"foot":25.5},"m":{"dur":80.0,"fire":null,"reach":null,"mob":2.5,"foot":0.5}},"wh":{"key":"Warlock","fac":"aeldari","prof":{"M":"7\"","T":"3","Sv":"6+","W":"2","Ld":"6+","OC":"1"},"base":"32mm","w":[{"n":"Destructor psychic torrent","r":"12\"","a":"D6","s":"N/A","S":"5","ap":"-1","d":"1"},{"n":"Shuriken pistol assault pistol","r":"12\"","a":"1","s":"3+","S":"4","ap":"-1","d":"1"},{"n":"Singing spear assault psychic","r":"12\"","a":"1","s":"3+","S":"9","ap":"0","d":"3"},{"n":"Singing spear psychic","r":"Melee","a":"2","s":"3+","S":"3","ap":"0","d":"3"},{"n":"Witchblade anti-infantry 2+ psychic","r":"Melee","a":"2","s":"3+","S":"3","ap":"0","d":"2"}],"core":"Leader","p":{"dur":22.6,"fire":36.5,"reach":26.0,"mob":42.5,"foot":31.5},"m":{"dur":6.0,"fire":6.0,"reach":12.0,"mob":7.0,"foot":32.0}},"alt":null},{"id":"hightemplar-farseer","race":"protoss","tier":"Psyker","scName":"High Templar","whName":"Farseer","whFac":"Aeldari","verdict":"Even the signature spell has almost the same name.","body":["The High Templar is the most physically pathetic combat unit in the Protoss army \u2014 40 health, 40 shields \u2014 and the most feared, because Psionic Storm deletes clustered infantry outright. Templar commune with their ancestors through the archives and wear khaydarin amulets to channel more efficiently, and two of them can burn out their own existences to become an Archon.","The Farseer is an ancient psyker whose runes read the skeins of fate, whose battlefield weapon is the Eldritch Storm \u2014 24\", Blast, Psychic, S6 AP-2 \u2014 and whose real contribution is foresight: guiding and dooming, bending probability rather than matter. Both are the frailest and most valuable model in the list."],"conv":["An ancient, physically frail psychic elder who is the army's highest-value target","Both deliver a signature area psychic storm \u2014 'Psionic Storm' and 'Eldritch Storm'","Both are useless in melee and decisive from twenty metres away"],"div":["The Farseer's true power is precognition \u2014 rerolls, fate, probability. The High Templar's is raw destructive energy","A Templar's end is voluntary transcendence into an Archon. A Farseer's is her soul being eaten"],"fact":"Both units answer the question 'what does the psychic specialist do' with an area-denial storm, and both armies then have to be balanced around the fact that clumping up is now a mistake.","score":{"role":24,"form":22,"doctrine":24,"mech":22},"total":92,"sc":{"key":"HighTemplar","hp":40.0,"sh":40.0,"ar":0.0,"sup":2.0,"min":50,"gas":150,"bt":39.3,"sp":2.015625,"si":10.0,"rad":0.375,"attr":["Light","Biological","Psionic"],"fly":false,"w":[{"t":"Ground","d":4.0,"a":1,"cd":1.754,"r":6.0,"dps":2.28,"b":[]}],"p":{"dur":16.4,"fire":0.0,"reach":63.5,"mob":20.0,"foot":10.0},"m":{"dur":80.0,"fire":2.28,"reach":6.0,"mob":2.015625,"foot":0.375}},"wh":{"key":"Farseer","fac":"aeldari","prof":{"M":"7\"","T":"3","Sv":"6+","W":"4","Ld":"6+","OC":"1"},"base":"25mm","w":[{"n":"Eldritch Storm blast psychic","r":"24\"","a":"D6","s":"3+","S":"6","ap":"-2","d":"D3"},{"n":"Shuriken pistol assault pistol","r":"12\"","a":"1","s":"2+","S":"4","ap":"-1","d":"1"},{"n":"Singing spear assault psychic","r":"12\"","a":"1","s":"2+","S":"9","ap":"0","d":"3"},{"n":"Singing spear psychic","r":"Melee","a":"2","s":"2+","S":"3","ap":"0","d":"3"},{"n":"Witchblade anti-infantry 2+ psychic","r":"Melee","a":"2","s":"2+","S":"3","ap":"0","d":"2"}],"core":"Leader","p":{"dur":31.1,"fire":54.8,"reach":58.7,"mob":42.5,"foot":3.3},"m":{"dur":12.0,"fire":7.0,"reach":24.0,"mob":7.0,"foot":25.0}},"alt":null},{"id":"darktemplar-mandrake","race":"protoss","tier":"Infiltrator","scName":"Dark Templar","whName":"Mandrakes","whFac":"Drukhari","verdict":"Permanent shadow, and a society that would rather not discuss them.","body":["Dark Templar severed their own nerve cords to reject the Khala and were exiled for it. They are permanently cloaked, require detection to even target, and their warp blades do 45 damage a swing \u2014 enough to remove most units in one or two strikes. Mandrakes are shadow-things out of Aelindrach that even the Drukhari find unsettling, stalking out of darkness with stealth and baleblast.","Both are the unit your opponent must build a specific answer to, and both come from the part of their civilisation nobody talks about at parties."],"conv":["Permanent concealment that demands a dedicated counter rather than a better army","One-strike lethality against unprepared targets","Both are spiritual exiles from their own society's mainstream"],"div":["Dark Templar are honourable ascetics. Mandrakes are predatory nightmares with no such claim","Mechanically the closest 40K infiltrator-assassin is the Callidus, who walks out of a shape-shifted disguise rather than out of shadow"],"fact":"45 damage per swing makes the Dark Templar the hardest-hitting individual attack in StarCraft II. In 40K the equivalent design space is not a big number but a rule: kill the character, ignore the squad.","score":{"role":21,"form":21,"doctrine":20,"mech":21},"total":83,"sc":{"key":"DarkTemplar","hp":40.0,"sh":80.0,"ar":1.0,"sup":2.0,"min":125,"gas":125,"bt":39.3,"sp":2.8125,"si":8.0,"rad":0.375,"attr":["Light","Biological","Psionic"],"fly":false,"w":[{"t":"Ground","d":45.0,"a":1,"cd":1.694,"r":0.10009765625,"dps":26.56,"b":[]}],"p":{"dur":31.8,"fire":94.6,"reach":2.7,"mob":67.3,"foot":10.0},"m":{"dur":120.0,"fire":26.56,"reach":0.10009765625,"mob":2.8125,"foot":0.375}},"wh":{"key":"Mandrakes","fac":"drukhari","prof":{"M":"8\"","T":"3","Sv":"7+","W":"1","Ld":"7+","OC":"1"},"base":"28.5mm","w":[{"n":"Baleblast assault devastating wounds ignores cover","r":"18\"","a":"2","s":"3+","S":"5","ap":"-1","d":"1"},{"n":"Glimmersteel blade devastating wounds","r":"Melee","a":"3","s":"3+","S":"5","ap":"-1","d":"1"}],"core":"","p":{"dur":10.4,"fire":6.7,"reach":42.3,"mob":57.5,"foot":15.2},"m":{"dur":3.0,"fire":3.0,"reach":18.0,"mob":8.0,"foot":28.5}},"alt":{"key":"Callidus-Assassin","fac":"imperial-agents","prof":{"M":"7\"","T":"4","Sv":"6+","W":"4","Ld":"6+","OC":"1"},"base":"32mm","w":[{"n":"Neural shredder anti-infantry 2+ precision torrent","r":"12\"","a":"D6","s":"N/A","S":"5","ap":"-2","d":"1"},{"n":"Phase sword and poison blades lethal hits precision","r":"Melee","a":"5","s":"2+","S":"5","ap":"-4","d":"2"}],"core":"","p":{"dur":46.2,"fire":70.2,"reach":26.0,"mob":42.5,"foot":31.5},"m":{"dur":16.0,"fire":10.0,"reach":12.0,"mob":7.0,"foot":32.0}}},{"id":"archon-avatar","race":"protoss","tier":"Summoned god","scName":"Archon","whName":"Avatar of Khaine","whFac":"Aeldari","verdict":"A god called up by volunteering to stop existing.","body":["An Archon is created when two templar merge permanently, giving up their individual lives to become a being of psionic energy with a short and violent lifespan: 10 health under 350 shields, splash damage, and no way back. The Avatar of Khaine is the iron-and-fire shard of a dead god, woken when a craftworld's Young King voluntarily walks into the Avatar's chamber and is consumed by it \u2014 a ritual sacrifice that produces a T11, W14 burning war-god with Deadly Demise D3.","Both universes arrived at the same theology: a god can be summoned, but only by someone choosing to stop being a person."],"conv":["A greater being produced by the voluntary self-erasure of individuals","Both are energy or flame given a body, and both burn out","Both are a faction's emergency button rather than a plan"],"div":["Archons are routine \u2014 a standard build option, made by the dozen. The Avatar is a once-per-craftworld event","Strip the Archon's 350 shields and only 10 health remain. The Avatar has no such cliff; it simply keeps burning"],"fact":"The Archon's 10 HP behind 350 shields is the most extreme defensive ratio in StarCraft II, and it is a perfect mechanical metaphor: what is left of the two templar underneath is almost nothing.","score":{"role":23,"form":22,"doctrine":24,"mech":20},"total":89,"sc":{"key":"Archon","hp":10.0,"sh":350.0,"ar":0.0,"sup":4.0,"min":175,"gas":275,"bt":0.0,"sp":2.8125,"si":9.0,"rad":1.0,"attr":["Psionic","Massive"],"fly":false,"w":[{"t":"Any","d":25.0,"a":1,"cd":1.754,"r":3.0,"dps":14.25,"b":[["Biological",10.0]]}],"p":{"dur":90.9,"fire":81.1,"reach":25.7,"mob":67.3,"foot":83.6},"m":{"dur":360.0,"fire":14.25,"reach":3.0,"mob":2.8125,"foot":1.0}},"wh":{"key":"Avatar-of-Khaine","fac":"aeldari","prof":{"M":"10\"","T":"11","Sv":"2+","W":"14","Ld":"6+","OC":"5"},"base":"80mm","w":[{"n":"The Wailing Doom sustained hits d3","r":"12\"","a":"1","s":"2+","S":"16","ap":"-4","d":"D6+2"}],"core":"Deadly Demise D3","p":{"dur":94.3,"fire":21.2,"reach":26.0,"mob":78.3,"foot":77.2},"m":{"dur":154.0,"fire":5.5,"reach":12.0,"mob":10.0,"foot":80.0}},"alt":null},{"id":"colossus-wraithknight","race":"protoss","tier":"Titan-class walker","scName":"Colossus","whName":"Wraithknight","whFac":"Aeldari","verdict":"The long legs are the weapon.","body":["The Colossus is defined by geometry: it is tall enough to walk over cliffs the rest of the army has to path around, and its thermal lances sweep a line rather than hitting a target. That height is also its flaw \u2014 it is large enough that anti-air weapons can shoot it, a rule that exists solely to make the silhouette a liability as well as an asset.","The Wraithknight is the Aeldari equivalent in both scale and construction: M12\", T12, an 18-wound ghost-titan on a 120x92mm base, piloted by living Aeldari bonded to it, and \u2014 like the Colossus \u2014 a very large, very expensive thing that dies faster than its size suggests."],"conv":["The army's largest routine walker, defined by reach and stride","Both are fragile relative to cost and both are a target the whole enemy list can angle at","Both step over terrain that constrains everything else"],"div":["Anti-air weapons can hit a Colossus. 40K has no such cross-category quirk for walkers","The Wraithknight carries a spirit \u2014 it is another ghost warrior. The Colossus is a machine with no occupant"],"fact":"Making the Colossus targetable by anti-air is one of the neatest pieces of rules-fiction in StarCraft: the unit is punished by exactly the thing that makes it good.","score":{"role":22,"form":23,"doctrine":18,"mech":20},"total":83,"sc":{"key":"Colossus","hp":250.0,"sh":100.0,"ar":1.0,"sup":6.0,"min":300,"gas":200,"bt":53.6,"sp":2.25,"si":10.0,"rad":1.0,"attr":["Armored","Mechanical","Massive"],"fly":false,"w":[{"t":"Ground","d":10.0,"a":2,"cd":1.5,"r":7.0,"dps":13.33,"b":[["Light",5.0]]}],"p":{"dur":89.1,"fire":75.7,"reach":79.7,"mob":34.5,"foot":83.6},"m":{"dur":350.0,"fire":13.33,"reach":7.0,"mob":2.25,"foot":1.0}},"wh":{"key":"Wraithknight","fac":"aeldari","prof":{"M":"12\"","T":"12","Sv":"2+","W":"18","Ld":"6+","OC":"10"},"base":"120x92mm","w":[{"n":"Heavy wraithcannon devastating wounds","r":"36\"","a":"D3","s":"3+","S":"20","ap":"-4","d":"2D6"},{"n":"Scatter laser sustained hits 1","r":"36\"","a":"6","s":"3+","S":"5","ap":"0","d":"1"},{"n":"Shuriken cannon lethal hits","r":"24\"","a":"3","s":"3+","S":"6","ap":"-1","d":"2"},{"n":"Starcannon","r":"36\"","a":"2","s":"3+","S":"8","ap":"-3","d":"2"},{"n":"Suncannon blast","r":"48\"","a":"D6+4","s":"3+","S":"10","ap":"-3","d":"3"},{"n":"Titanic feet","r":"Melee","a":"5","s":"3+","S":"8","ap":"-1","d":"2"}],"core":"Deadly Demise D6","p":{"dur":98.1,"fire":96.2,"reach":89.4,"mob":91.5,"foot":94.6},"m":{"dur":216.0,"fire":22.5,"reach":48.0,"mob":12.0,"foot":105.1}},"alt":null},{"id":"voidray-fireprism","race":"protoss","tier":"Beam platform","scName":"Void Ray","whName":"Fire Prism","whFac":"Aeldari","verdict":"Both armies built a tank around a crystal.","body":["The Void Ray fires a continuous prismatic beam and can align it \u2014 Prismatic Alignment \u2014 to cut through heavy armour for a short window. The Fire Prism is a grav-tank whose entire design is a crystal at the top that focuses the energy of its prism cannon, switching between a focused lance and a dispersed blast.","The metaphor is identical and so is the silhouette: an elegant hovering hull with a lens on top, whose damage depends on how the light is shaped."],"conv":["A focused-energy beam weapon that can be concentrated or spread","Both are hovering, graceful platforms with no ground contact","Both are the anti-armour answer in an army that dislikes attrition"],"div":["Prismatic Alignment is a timed buff the player activates. The Fire Prism chooses a firing mode each turn","Fire Prisms can link their beams with other Fire Prisms \u2014 StarCraft has no unit-to-unit weapon linking"],"fact":"Two design teams, independently, put a literal prism on a hovering tank and made the beam the unit's name. Of everything in this databank, this is the coincidence that is hardest to explain.","score":{"role":23,"form":22,"doctrine":21,"mech":22},"total":88,"sc":{"key":"VoidRay","hp":150.0,"sh":100.0,"ar":0.0,"sup":4.0,"min":250,"gas":150,"bt":43.0,"sp":2.75,"si":10.0,"rad":1.0,"attr":["Armored","Mechanical"],"fly":true,"w":[],"p":{"dur":81.8,"fire":null,"reach":null,"mob":57.3,"foot":83.6},"m":{"dur":250.0,"fire":null,"reach":null,"mob":2.75,"foot":1.0}},"wh":{"key":"Fire-Prism","fac":"aeldari","prof":{"M":"14\"","T":"9","Sv":"3+","W":"12","Ld":"7+","OC":"3"},"base":null,"w":[{"n":"Shuriken cannon lethal hits","r":"24\"","a":"3","s":"3+","S":"6","ap":"-1","d":"2"},{"n":"Twin shuriken catapult assault twin-linked","r":"18\"","a":"2","s":"3+","S":"4","ap":"-1","d":"1"},{"n":"Wraithbone hull","r":"Melee","a":"3","s":"4+","S":"6","ap":"0","d":"1"}],"core":"Deadly Demise D3","p":{"dur":79.2,"fire":36.5,"reach":58.7,"mob":96.2,"foot":null},"m":{"dur":108.0,"fire":6.0,"reach":24.0,"mob":14.0,"foot":null}},"alt":null},{"id":"phoenix-crimsonhunter","race":"protoss","tier":"Interceptor","scName":"Phoenix","whName":"Crimson Hunter","whFac":"Aeldari","verdict":"Air superiority, and nothing else.","body":["The Phoenix cannot attack ground targets at all. It is a pure interceptor: 4.25 movement, ion cannons that fire while moving, and a Graviton Beam that lifts a single ground unit helplessly into the air. The Crimson Hunter is the Aeldari Aspect flyer built for exactly one job \u2014 hunting other aircraft \u2014 with bright lances and a 20+\" move.","Both armies decided that air superiority deserves a specialist rather than a generalist, and both specialists are useless the moment the sky is empty."],"conv":["Dedicated anti-air fighters that cannot meaningfully hurt ground forces","Both are fast, elegant and fragile \u2014 the aesthetic is doing real work in both designs","Both are a hard counter rather than a flexible investment"],"div":["The Graviton Beam plucks a tank off the ground and holds it there. There is nothing remotely like it in 40K","Crimson Hunters gain accuracy specifically against other aircraft; the Phoenix's specialisation is enforced by simply not having a ground attack"],"fact":"The Phoenix is named for a bird of rebirth and the Crimson Hunter is crewed by an Aspect Warrior of the Exarch path \u2014 both factions dress their fighter pilots in myth rather than squadron numbers.","score":{"role":23,"form":21,"doctrine":19,"mech":22},"total":85,"sc":{"key":"Phoenix","hp":120.0,"sh":60.0,"ar":0.0,"sup":2.0,"min":150,"gas":100,"bt":25.0,"sp":4.25,"si":10.0,"rad":0.75,"attr":["Light","Mechanical"],"fly":true,"w":[{"t":"Air","d":5.0,"a":2,"cd":1.1,"r":5.0,"dps":9.09,"b":[["Light",5.0]]}],"p":{"dur":66.4,"fire":54.1,"reach":43.2,"mob":97.3,"foot":57.3},"m":{"dur":180.0,"fire":9.09,"reach":5.0,"mob":4.25,"foot":0.75}},"wh":{"key":"Crimson-Hunter","fac":"aeldari","prof":{"M":"20+\"","T":"8","Sv":"3+","W":"12","Ld":"6+","OC":"0"},"base":null,"w":[{"n":"Bright lance","r":"36\"","a":"1","s":"3+","S":"12","ap":"-3","d":"D6+2"},{"n":"Pulse laser","r":"48\"","a":"3","s":"3+","S":"9","ap":"-2","d":"D6"},{"n":"Starcannon","r":"36\"","a":"2","s":"3+","S":"8","ap":"-3","d":"2"},{"n":"Wraithbone hull","r":"Melee","a":"3","s":"4+","S":"6","ap":"0","d":"1"}],"core":"","p":{"dur":71.7,"fire":73.1,"reach":89.4,"mob":99.1,"foot":null},"m":{"dur":96.0,"fire":10.5,"reach":48.0,"mob":20.0,"foot":null}},"alt":null}],"roster":[{"n":"SCV","race":"terran","sup":1.0,"dur":45.0,"cost":50,"dps":3.33,"rad":0.375},{"n":"Marine","race":"terran","sup":1.0,"dur":45.0,"cost":50,"dps":6.97,"rad":0.375},{"n":"Marauder","race":"terran","sup":2.0,"dur":125.0,"cost":125,"dps":6.67,"rad":0.5625},{"n":"Reaper","race":"terran","sup":1.0,"dur":60.0,"cost":100,"dps":7.27,"rad":0.375},{"n":"Ghost","race":"terran","sup":3.0,"dur":100.0,"cost":275,"dps":6.67,"rad":0.375},{"n":"Medivac","race":"terran","sup":2.0,"dur":150.0,"cost":200,"dps":null,"rad":0.75},{"n":"Hellion","race":"terran","sup":2.0,"dur":90.0,"cost":100,"dps":3.2,"rad":0.625},{"n":"SiegeTank","race":"terran","sup":3.0,"dur":175.0,"cost":275,"dps":14.42,"rad":0.875},{"n":"SiegeTankSieged","race":"terran","sup":3.0,"dur":175.0,"cost":275,"dps":13.33,"rad":0.875},{"n":"Thor","race":"terran","sup":6.0,"dur":400.0,"cost":500,"dps":46.87,"rad":1.0},{"n":"Battlecruiser","race":"terran","sup":6.0,"dur":550.0,"cost":700,"dps":null,"rad":1.25},{"n":"Banshee","race":"terran","sup":3.0,"dur":140.0,"cost":250,"dps":19.2,"rad":0.75},{"n":"VikingFighter","race":"terran","sup":2.0,"dur":135.0,"cost":225,"dps":10.0,"rad":0.75},{"n":"Raven","race":"terran","sup":2.0,"dur":140.0,"cost":250,"dps":null,"rad":0.625},{"n":"Drone","race":"zerg","sup":1.0,"dur":40.0,"cost":50,"dps":3.33,"rad":0.375},{"n":"Zergling","race":"zerg","sup":0.5,"dur":35.0,"cost":25,"dps":7.18,"rad":0.375},{"n":"Baneling","race":"zerg","sup":0.5,"dur":30.0,"cost":75,"dps":null,"rad":0.375},{"n":"Roach","race":"zerg","sup":2.0,"dur":145.0,"cost":100,"dps":8.0,"rad":0.5},{"n":"Hydralisk","race":"zerg","sup":2.0,"dur":90.0,"cost":150,"dps":14.55,"rad":0.625},{"n":"LurkerMP","race":"zerg","sup":3.0,"dur":190.0,"cost":300,"dps":null,"rad":0.9375},{"n":"LurkerMPBurrowed","race":"zerg","sup":3.0,"dur":190.0,"cost":300,"dps":10.0,"rad":0.75},{"n":"Infestor","race":"zerg","sup":2.0,"dur":90.0,"cost":250,"dps":null,"rad":0.625},{"n":"SwarmHostMP","race":"zerg","sup":3.0,"dur":160.0,"cost":175,"dps":null,"rad":0.8125},{"n":"Mutalisk","race":"zerg","sup":2.0,"dur":120.0,"cost":200,"dps":5.9,"rad":0.5},{"n":"Corruptor","race":"zerg","sup":2.0,"dur":200.0,"cost":250,"dps":7.37,"rad":0.625},{"n":"BroodLord","race":"zerg","sup":4.0,"dur":225.0,"cost":550,"dps":8.0,"rad":1.0},{"n":"Ultralisk","race":"zerg","sup":6.0,"dur":500.0,"cost":475,"dps":40.69,"rad":1.0},{"n":"Queen","race":"zerg","sup":2.0,"dur":175.0,"cost":175,"dps":9.0,"rad":0.875},{"n":"Viper","race":"zerg","sup":3.0,"dur":150.0,"cost":300,"dps":null,"rad":1.0},{"n":"Probe","race":"protoss","sup":1.0,"dur":40.0,"cost":50,"dps":3.33,"rad":0.375},{"n":"Zealot","race":"protoss","sup":2.0,"dur":150.0,"cost":100,"dps":13.33,"rad":0.5},{"n":"Stalker","race":"protoss","sup":2.0,"dur":160.0,"cost":175,"dps":6.95,"rad":0.625},{"n":"Sentry","race":"protoss","sup":2.0,"dur":80.0,"cost":150,"dps":null,"rad":0.5},{"n":"Adept","race":"protoss","sup":2.0,"dur":140.0,"cost":125,"dps":4.44,"rad":0.5},{"n":"Immortal","race":"protoss","sup":4.0,"dur":300.0,"cost":350,"dps":12.5,"rad":0.75},{"n":"Colossus","race":"protoss","sup":6.0,"dur":350.0,"cost":500,"dps":13.33,"rad":1.0},{"n":"HighTemplar","race":"protoss","sup":2.0,"dur":80.0,"cost":200,"dps":2.28,"rad":0.375},{"n":"DarkTemplar","race":"protoss","sup":2.0,"dur":120.0,"cost":250,"dps":26.56,"rad":0.375},{"n":"Archon","race":"protoss","sup":4.0,"dur":360.0,"cost":450,"dps":14.25,"rad":1.0},{"n":"Observer","race":"protoss","sup":1.0,"dur":70.0,"cost":100,"dps":null,"rad":0.5},{"n":"Phoenix","race":"protoss","sup":2.0,"dur":180.0,"cost":250,"dps":9.09,"rad":0.75},{"n":"VoidRay","race":"protoss","sup":4.0,"dur":250.0,"cost":400,"dps":null,"rad":1.0},{"n":"Carrier","race":"protoss","sup":6.0,"dur":450.0,"cost":600,"dps":null,"rad":1.25},{"n":"Mothership","race":"protoss","sup":8.0,"dur":700.0,"cost":800,"dps":10.86,"rad":1.375},{"n":"Disruptor","race":"protoss","sup":4.0,"dur":200.0,"cost":300,"dps":null,"rad":0.625},{"n":"HellionTank","race":"terran","sup":2.0,"dur":135.0,"cost":100,"dps":9.0,"rad":0.625},{"n":"Liberator","race":"protoss","sup":3.0,"dur":180.0,"cost":275,"dps":5.56,"rad":0.75},{"n":"Cyclone","race":"protoss","sup":3.0,"dur":120.0,"cost":250,"dps":18.0,"rad":0.75},{"n":"Tempest","race":"protoss","sup":4.0,"dur":300.0,"cost":425,"dps":12.12,"rad":1.125},{"n":"Oracle","race":"protoss","sup":3.0,"dur":160.0,"cost":300,"dps":null,"rad":0.75},{"n":"Ravager","race":"protoss","sup":3.0,"dur":120.0,"cost":200,"dps":10.0,"rad":0.75},{"n":"WidowMine","race":"protoss","sup":2.0,"dur":90.0,"cost":100,"dps":null,"rad":0.5}],"bases":[{"n":"Cadian Shock Troops","mm":25.0,"fac":"astra-militarum"},{"n":"Tempestus Scions","mm":25.0,"fac":"astra-militarum"},{"n":"Spore Mines","mm":25.0,"fac":"tyranids"},{"n":"Farseer","mm":25.0,"fac":"aeldari"},{"n":"Mandrakes","mm":28.5,"fac":"drukhari"},{"n":"Hormagaunts","mm":28.5,"fac":"tyranids"},{"n":"Termagants","mm":28.5,"fac":"tyranids"},{"n":"Howling Banshees","mm":28.5,"fac":"aeldari"},{"n":"Striking Scorpions","mm":28.5,"fac":"aeldari"},{"n":"Guardian Defenders","mm":28.5,"fac":"aeldari"},{"n":"Dark Reapers","mm":28.5,"fac":"aeldari"},{"n":"Tech Priest Enginseer","mm":32.0,"fac":"astra-militarum"},{"n":"Assault Intercessors With Jump Packs","mm":32.0,"fac":"space-marines"},{"n":"Vindicare Assassin","mm":32.0,"fac":"imperial-agents"},{"n":"Callidus Assassin","mm":32.0,"fac":"imperial-agents"},{"n":"Eversor Assassin","mm":32.0,"fac":"imperial-agents"},{"n":"Immortals","mm":32.0,"fac":"necrons"},{"n":"Genestealers","mm":32.0,"fac":"tyranids"},{"n":"Warlock","mm":32.0,"fac":"aeldari"},{"n":"Ogryn Squad","mm":40.0,"fac":"astra-militarum"},{"n":"Aggressor Squad","mm":40.0,"fac":"space-marines"},{"n":"Apothecary","mm":40.0,"fac":"space-marines"},{"n":"Terminator Assault Squad","mm":40.0,"fac":"space-marines"},{"n":"Raveners","mm":40.0,"fac":"tyranids"},{"n":"Zoanthropes","mm":40.0,"fac":"tyranids"},{"n":"Ripper Swarms","mm":40.0,"fac":"tyranids"},{"n":"Wraithguard","mm":40.0,"fac":"aeldari"},{"n":"Wraithblades","mm":40.0,"fac":"aeldari"},{"n":"Centurion Assault Squad","mm":50.0,"fac":"space-marines"},{"n":"Tyranid Warriors With Ranged Bio weapons","mm":50.0,"fac":"tyranids"},{"n":"Tyranid Warriors With Melee Bio weapons","mm":50.0,"fac":"tyranids"},{"n":"Neurotyrant","mm":50.0,"fac":"tyranids"},{"n":"Lictor","mm":50.0,"fac":"tyranids"},{"n":"Hive Tyrant","mm":60.0,"fac":"tyranids"},{"n":"Wraithlord","mm":60.0,"fac":"aeldari"},{"n":"Scout Sentinels","mm":80.0,"fac":"astra-militarum"},{"n":"Avatar of Khaine","mm":80.0,"fac":"aeldari"},{"n":"Carnifexes","mm":85.7,"fac":"tyranids"},{"n":"Dreadnought","mm":90.0,"fac":"space-marines"},{"n":"Redemptor Dreadnought","mm":90.0,"fac":"space-marines"},{"n":"Screamer killer","mm":90.0,"fac":"tyranids"},{"n":"Armiger Warglaive","mm":100.0,"fac":"imperial-knights"},{"n":"Mawloc","mm":105.1,"fac":"tyranids"},{"n":"Tervigon","mm":105.1,"fac":"tyranids"},{"n":"Trygon","mm":105.1,"fac":"tyranids"},{"n":"Wraithknight","mm":105.1,"fac":"aeldari"},{"n":"Knight Paladin","mm":136.1,"fac":"imperial-knights"}],"systems":[{"t":"Supply cap \u2194 Synapse range","sc":"Every Zerg unit consumes supply provided by Overlords; run out and the Swarm simply stops growing.","wh":"Tyranid bioforms outside a synapse creature's bubble revert to instinct and stop following orders.","note":"Both games model the horde's real weakness as bandwidth, not bodies. Kill the transmitter, not the swarm."},{"t":"Creep \u2194 Digestion pools & capillary towers","sc":"Zerg structures need creep; Zerg units move faster on it. The map is visibly colonised as the Swarm wins.","wh":"Tyranid-held worlds are progressively covered in digestion pools and capillary towers that render the biosphere down.","note":"Same image \u2014 the enemy's territory becomes the enemy's organ \u2014 but StarCraft makes it a movement bonus and 40K makes it an ending."},{"t":"Warp-in \u2194 The Webway","sc":"Protoss units materialise at a Pylon's power field; buildings warp in complete. Nothing is transported the long way.","wh":"The Aeldari move through the webway, a network outside realspace, arriving where no approach existed.","note":"Both are civilisations that refuse to march. The Protoss version is instantaneous and industrial; the Aeldari version is an inherited ruin they no longer fully control."},{"t":"Plasma shields \u2194 Invulnerable saves","sc":"Protoss shields absorb damage first and regenerate out of combat \u2014 durability that comes back for free.","wh":"Invulnerable saves ignore armour penetration entirely, giving elite models a floor no weapon can lower.","note":"Two different answers to 'how do we make the elite faction feel elite': one regenerates, one cannot be bypassed."},{"t":"Detection \u2194 Line of sight","sc":"Cloaked units are untargetable without a detector. Detection is a build-order obligation, not a choice.","wh":"Stealth, Lone Operative and Infiltrators restrict who may shoot at a model and from how far.","note":"StarCraft makes invisibility binary and buys it with tech; 40K makes it conditional and buys it with rules text."},{"t":"The resource economy \u2194 nothing at all","sc":"Minerals, vespene, workers, expansions. Most of a StarCraft match is an argument about money.","wh":"Both armies arrive fully paid for. Points are spent before the game starts and never again.","note":"This is the deepest divergence between the two hobbies: StarCraft is a game about production, 40K is a game about a battle."}],"orphans":[{"n":"Carrier & Interceptors","s":"Protoss","w":"A capital ship whose weapons are eight small craft it launches and rebuilds mid-battle. 40K's tabletop has no carrier of any kind \u2014 fighters are their own datasheets and nothing spawns them."},{"n":"Viking","s":"Terran","w":"A fighter that lands and becomes a walking mech. Nothing in 40K changes movement category mid-battle."},{"n":"Battlecruiser","s":"Terran","w":"A Behemoth-class capital ship on the same map as infantry. 40K puts its warships in a separate game entirely (Battlefleet Gothic); the Imperium's void war never shares a table with a Guardsman."},{"n":"Orks","s":"\u2014","w":"40K's greenskin horde \u2014 comic, fungal, and powered by collective belief \u2014 has no StarCraft counterpart. The Zerg are the horde, but they are never funny."},{"n":"Necrons","s":"\u2014","w":"An undying machine civilisation waking from sixty million years asleep. StarCraft's nearest gesture is the Purifiers, an AI faction, and they are a subplot rather than a power."},{"n":"T'au","s":"\u2014","w":"A young, optimistic, expansionist technocracy that believes in a Greater Good. StarCraft has no faction that is sincerely hopeful."},{"n":"Chaos & the Warp","s":"\u2014","w":"40K's central metaphysics \u2014 emotion as a physical dimension inhabited by gods \u2014 has no analogue. StarCraft's psionics are a talent; the Void is a place, not a temptation."},{"n":"The worker","s":"All three","w":"SCVs, Drones and Probes. 40K has no economy for them to serve, which removes roughly half of what StarCraft is actually about."}],"n_sc":56,"n_wh":54};</script>
+<script>
+(function(){
+"use strict";
+var DB = window.DB, M = DB.matchups;
+var RACEMETA = {
+  terran:{n:"Terran Dominion",o:"The Imperium of Man",v:"--terran",
+    p:"Conscripts and criminals in powered armour, held together by propaganda, chemical stimulants and an officer class that treats casualties as a line item. Technology is industrial, mass-produced and repaired with a welding torch.",
+    t:["Resocialised conscripts","Mass production","Artillery doctrine","Nuclear option"]},
+  zerg:{n:"The Zerg Swarm",o:"Tyranid Hive Fleets",v:"--zerg",
+    p:"A single will distributed across countless disposable bodies, assimilating useful genetics from every species it consumes and re-growing its army faster than the enemy can kill it. Individual life has no accounting value.",
+    t:["One mind, many bodies","Assimilated genetics","Infinite replacement","Consumes worlds"]},
+  protoss:{n:"The Protoss",o:"The Aeldari",v:"--protoss",
+    p:"An ancient psychic civilisation past its peak, ruined by its own hubris, fielding irreplaceable warriors and beautiful technology in wars it cannot afford to fight. Every loss is permanent.",
+    t:["Psychic caste society","Lost golden age","Soul-bound machines","Quality over quantity"]}
+};
+var $=function(s,r){return (r||document).querySelector(s)};
+var el=function(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
+var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+
+/* ---------- theme ---------- */
+var root=document.documentElement;
+try{var t=localStorage.getItem('cdb-theme'); if(t)root.setAttribute('data-theme',t);}catch(e){}
+$('#theme').addEventListener('click',function(){
+  var cur=root.getAttribute('data-theme');
+  var isDark = cur ? cur==='dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  var next=isDark?'light':'dark';
+  root.setAttribute('data-theme',next);
+  try{localStorage.setItem('cdb-theme',next);}catch(e){}
+  drawStars();
+});
+
+/* ---------- tooltip ---------- */
+var tip=$('#tip');
+function showTip(e,html){tip.innerHTML=html;tip.style.opacity='1';
+  var x=e.clientX+14,y=e.clientY+14;
+  if(x+tip.offsetWidth>innerWidth-8)x=e.clientX-tip.offsetWidth-14;
+  if(y+tip.offsetHeight>innerHeight-8)y=e.clientY-tip.offsetHeight-14;
+  tip.style.left=x+'px';tip.style.top=y+'px';}
+function hideTip(){tip.style.opacity='0';}
+function bindTip(node,html){
+  node.addEventListener('mousemove',function(e){showTip(e,html)});
+  node.addEventListener('mouseleave',hideTip);
+}
+
+/* ---------- hero canvas ---------- */
+var cv=$('#stars'),ctx=cv.getContext('2d'),parts=[],reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function css(v){return getComputedStyle(root).getPropertyValue(v).trim()}
+function drawStars(){
+  var r=cv.parentElement.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);
+  cv.width=r.width*dpr;cv.height=r.height*dpr;cv.style.height=r.height+'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  if(!parts.length){for(var i=0;i<90;i++)parts.push({x:Math.random(),y:Math.random(),r:Math.random()*1.6+.4,s:Math.random()*.16+.03,c:Math.random()<.42});}
+  render(r.width,r.height);
+}
+function render(w,h){
+  ctx.clearRect(0,0,w,h);
+  var k=css('--kop'),m=css('--m41');
+  for(var i=0;i<parts.length;i++){var p=parts[i];
+    ctx.beginPath();ctx.arc(p.x*w,p.y*h,p.r,0,6.2832);
+    ctx.fillStyle=p.c?k:m;ctx.globalAlpha=.16+p.r*.26;ctx.fill();}
+  ctx.globalAlpha=1;
+}
+function tick(){
+  var r=cv.parentElement.getBoundingClientRect();
+  for(var i=0;i<parts.length;i++){var p=parts[i];p.x-=p.s/r.width*12;if(p.x<-.02)p.x=1.02;}
+  render(r.width,r.height);requestAnimationFrame(tick);
+}
+drawStars();if(!reduced)requestAnimationFrame(tick);
+addEventListener('resize',drawStars);
+
+/* ---------- count up ---------- */
+document.querySelectorAll('[data-count]').forEach(function(n){
+  var target=+n.getAttribute('data-count');
+  if(reduced){n.textContent=target;return;}
+  var st=null;
+  function step(ts){ if(!st)st=ts; var k=Math.min(1,(ts-st)/900);
+    n.textContent=Math.round(target*(1-Math.pow(1-k,3)));
+    if(k<1)requestAnimationFrame(step);}
+  requestAnimationFrame(step);
+});
+
+/* ---------- faction primer ---------- */
+(function(){
+  var box=$('#prim');
+  ['terran','zerg','protoss'].forEach(function(r){
+    var m=RACEMETA[r],c=el('div','pcard');
+    c.style.setProperty('--acc','var('+m.v+')');
+    c.innerHTML='<div class="rail"></div><div class="in">'+
+      '<div class="pnames"><span class="pn1">'+esc(m.n)+'</span><span class="arrow">⟷</span><span class="pn2">'+esc(m.o)+'</span></div>'+
+      '<p>'+esc(m.p)+'</p><div class="ptrait">'+m.t.map(function(x){return '<span class="chip">'+esc(x)+'</span>'}).join('')+'</div></div>';
+    box.appendChild(c);
+  });
+})();
+
+/* ---------- detail renderer ---------- */
+var AXES=[['dur','Durability'],['fire','Damage volume'],['reach','Reach'],['mob','Mobility'],['foot','Footprint']];
+var current=null;
+
+function statGrid(sc){
+  var rows=[['HP',sc.hp],['Shields',sc.sh||'—'],['Armour',sc.ar],['Supply',sc.sup],
+            ['Minerals',sc.min],['Vespene',sc.gas||'—'],['Build',sc.bt+'s'],
+            ['Speed',sc.sp==null?'static':sc.sp],['Sight',sc.si],['Radius',sc.rad]];
+  return rows.map(function(r){return '<div class="gs"><div class="k">'+r[0]+'</div><div class="v">'+r[1]+'</div></div>'}).join('');
+}
+function whGrid(p,base){
+  var keys=['M','T','Sv','W','Ld','OC'];
+  var out=keys.map(function(k){return '<div class="gs"><div class="k">'+k+'</div><div class="v">'+esc(p[k]||'—')+'</div></div>'}).join('');
+  out+='<div class="gs"><div class="k">Base</div><div class="v">'+esc(base||'vehicle')+'</div></div>';
+  return out;
+}
+function scWeapons(sc){
+  if(!sc.w.length) return '<div class="attrs">No weapon in the data export — this unit attacks through an ability.</div>';
+  return '<div class="wscroll"><table class="wtbl"><tr><th>Target</th><th>Dmg</th><th>Cd</th><th>Rng</th><th>DPS</th><th>Bonus</th></tr>'+
+    sc.w.map(function(w){
+      var b=w.b.length?w.b.map(function(x){return '+'+x[1]+' vs '+x[0]}).join(', '):'—';
+      return '<tr><td>'+w.t+'</td><td>'+w.d+(w.a>1?' × '+w.a:'')+'</td><td>'+w.cd+'</td><td>'+w.r+'</td><td>'+w.dps.toFixed(1)+'</td><td>'+b+'</td></tr>';
+    }).join('')+'</table></div>';
+}
+function whWeapons(wh){
+  if(!wh.w.length) return '<div class="attrs">No weapon profile listed.</div>';
+  return '<div class="wscroll"><table class="wtbl"><tr><th>Weapon</th><th>Rng</th><th>A</th><th>Skill</th><th>S</th><th>AP</th><th>D</th></tr>'+
+    wh.w.map(function(w){
+      return '<tr><td>'+esc(w.n)+'</td><td>'+esc(w.r)+'</td><td>'+esc(w.a)+'</td><td>'+esc(w.s)+'</td><td>'+esc(w.S)+'</td><td>'+esc(w.ap)+'</td><td>'+esc(w.d)+'</td></tr>';
+    }).join('')+'</table></div>';
+}
+function profileChart(m){
+  var h='<div class="chartbox"><div class="ctitle">Comparative profile</div>'+
+    '<div class="cnote">Each bar is that unit\'s <b>percentile rank inside its own game\'s roster</b> '+
+    '('+DB.n_sc+' StarCraft II units · '+DB.n_wh+' 40K datasheets). The two rule systems share no units, so raw values '+
+    'are never plotted together — ranks are.</div>'+
+    '<div class="legend"><div class="lg"><span class="sw" style="background:var(--kop)"></span>'+esc(m.scName)+'</div>'+
+    '<div class="lg"><span class="sw" style="background:var(--m41)"></span>'+esc(m.whName)+'</div></div>';
+  AXES.forEach(function(a){
+    var sv=m.sc?m.sc.p[a[0]]:null, wv=m.wh?m.wh.p[a[0]]:null;
+    h+='<div class="prow"><div class="plabel"><span>'+a[1]+'</span><span>percentile</span></div>';
+    h+=bar(sv,'var(--kop)');
+    h+=bar(wv,'var(--m41)');
+    h+='</div>';
+  });
+  h+='<div class="ticks"><i style="left:0">0</i><i style="left:25%">25</i><i style="left:50%">50</i><i style="left:75%">75</i><i style="left:100%">100</i></div>';
+  return h+'</div>';
+}
+function bar(v,color){
+  if(v==null) return '<div class="ptrack"><span class="pnd">no data in source</span></div>';
+  return '<div class="ptrack"><i class="pfill" style="background:'+color+'" data-w="'+v+'"></i>'+
+         '<span class="pval">'+v.toFixed(0)+'</span></div>';
+}
+function ring(total){
+  var c=2*Math.PI*33, off=c*(1-total/100);
+  return '<div class="ring"><svg width="76" height="76" viewBox="0 0 76 76">'+
+    '<circle cx="38" cy="38" r="33" fill="none" stroke="var(--surf3)" stroke-width="6"/>'+
+    '<circle class="rc" cx="38" cy="38" r="33" fill="none" stroke="var(--protoss)" stroke-width="6" stroke-linecap="round" '+
+    'stroke-dasharray="'+c.toFixed(1)+'" stroke-dashoffset="'+c.toFixed(1)+'" data-off="'+off.toFixed(1)+'"/>'+
+    '</svg><div class="v">'+total+'</div></div>';
+}
+var SCOREK={role:'Role',form:'Form',doctrine:'Doctrine',mech:'Mechanics'};
+
+function renderDetail(m){
+  current=m.id;
+  var d=$('#detail');
+  var altHtml='';
+  if(m.alt) altHtml='<div class="attrs">Closest alternate datasheet: <b>'+esc(m.alt.key.replace(/-/g,' '))+'</b> — '+
+    ['M','T','Sv','W'].map(function(k){return k+' '+(m.alt.prof[k]||'—')}).join(' · ')+'</div>';
+
+  d.innerHTML=
+   '<div class="dtop">'+
+     '<div class="dside k"><div class="dlbl">Koprulu Sector · StarCraft II</div><div class="dname">'+esc(m.scName)+'</div>'+
+       '<div class="dmeta">'+esc(m.race.charAt(0).toUpperCase()+m.race.slice(1))+
+       (m.sc?' · '+esc(m.sc.attr.join(', ')):'')+'</div></div>'+
+     '<div class="dvs">'+ring(m.total)+'<div class="ringlbl">Convergence<br>score</div></div>'+
+     '<div class="dside m"><div class="dlbl">41st Millennium · 10th Edition</div><div class="dname">'+esc(m.whName)+'</div>'+
+       '<div class="dmeta">'+esc(m.whFac)+(m.wh&&m.wh.core?' · '+esc(m.wh.core):'')+'</div></div>'+
+   '</div>'+
+   '<div class="dbody">'+
+     '<div class="verdict">'+esc(m.verdict)+'</div>'+
+     '<div class="prose">'+m.body.map(function(p){return '<p>'+esc(p)+'</p>'}).join('')+'</div>'+
+     profileChart(m)+
+     '<div class="stats">'+
+       '<div class="tbox"><div class="thead k"><span>StarCraft II — '+esc(m.sc?m.sc.key:'—')+'</span><span>game data</span></div>'+
+         (m.sc?'<div class="gridstats">'+statGrid(m.sc)+'</div>'+scWeapons(m.sc):'<div class="attrs">Not a playable unit.</div>')+'</div>'+
+       '<div class="tbox"><div class="thead m"><span>40K — '+esc(m.wh?m.wh.key.replace(/-/g,' '):m.whName)+'</span><span>datasheet</span></div>'+
+         (m.wh?'<div class="gridstats">'+whGrid(m.wh.prof,m.wh.base)+'</div>'+whWeapons(m.wh)+altHtml
+              :'<div class="attrs">No 10th-edition datasheet exists for this unit — the pairing is lore-to-lore.</div>')+'</div>'+
+     '</div>'+
+     '<div class="cols">'+
+       '<div class="blk"><h4>Where they converge</h4><ul class="pts conv">'+m.conv.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul></div>'+
+       '<div class="blk"><h4>Where they diverge</h4><ul class="pts divg">'+m.div.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul></div>'+
+     '</div>'+
+     '<div class="sbreak">'+Object.keys(SCOREK).map(function(k){
+        return '<div class="sb"><div class="k"><span>'+SCOREK[k]+'</span><span>'+m.score[k]+'/25</span></div>'+
+               '<div class="t"><i data-w="'+(m.score[k]/25*100)+'"></i></div></div>';
+      }).join('')+'</div>'+
+     '<div class="factline"><b>Field note</b>'+esc(m.fact)+'</div>'+
+   '</div>';
+
+  requestAnimationFrame(function(){
+    d.querySelectorAll('.pfill,.sb .t i').forEach(function(n){n.style.width=n.getAttribute('data-w')+'%';});
+    var rc=d.querySelector('.rc'); if(rc)rc.style.transition='stroke-dashoffset .9s cubic-bezier(.22,1,.36,1)',rc.style.strokeDashoffset=rc.getAttribute('data-off');
+  });
+  document.querySelectorAll('.card').forEach(function(c){c.setAttribute('aria-current', c.dataset.id===m.id?'true':'false')});
+}
+
+/* ---------- grid ---------- */
+var state={race:'all',sort:'order',q:''};
+function visible(){
+  var q=state.q.toLowerCase();
+  return M.filter(function(m){
+    if(state.race!=='all'&&m.race!==state.race)return false;
+    if(!q)return true;
+    return (m.scName+' '+m.whName+' '+m.whFac+' '+m.tier+' '+m.verdict).toLowerCase().indexOf(q)>-1;
+  });
+}
+function renderGrid(){
+  var list=visible().slice();
+  if(state.sort==='score')list.sort(function(a,b){return b.total-a.total});
+  var g=$('#grid');g.innerHTML='';
+  list.forEach(function(m){
+    var b=el('button','card');b.dataset.id=m.id;
+    b.style.setProperty('--acc','var(--'+m.race+')');
+    b.setAttribute('aria-current', m.id===current?'true':'false');
+    b.innerHTML='<div class="ctier"><span>'+esc(m.tier)+'</span><span class="cscore">'+m.total+'</span></div>'+
+      '<div class="cn1">'+esc(m.scName)+'</div><div class="cvs">versus</div><div class="cn2">'+esc(m.whName)+'</div>';
+    b.addEventListener('click',function(){
+      renderDetail(m);
+      $('#detail').scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'});
+    });
+    g.appendChild(b);
+  });
+  $('#count').textContent=list.length+' of '+M.length+' pairings';
+}
+$('#raceseg').addEventListener('click',function(e){
+  var b=e.target.closest('button');if(!b)return;
+  state.race=b.dataset.r;
+  this.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});
+  renderGrid();
+});
+$('#sortseg').addEventListener('click',function(e){
+  var b=e.target.closest('button');if(!b)return;
+  state.sort=b.dataset.s;
+  this.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});
+  renderGrid();
+});
+$('#q').addEventListener('input',function(){state.q=this.value;renderGrid();});
+
+/* ---------- ranked chart ---------- */
+(function(){
+  var box=$('#rank');
+  M.slice().sort(function(a,b){return b.total-a.total}).forEach(function(m){
+    var r=el('button','rrow');
+    r.innerHTML='<span class="rname">'+esc(m.scName)+' <span style="color:var(--ink3)">/</span> '+esc(m.whName)+'</span>'+
+      '<span class="rtrack"><i class="rfill" style="background:var(--'+m.race+')" data-w="'+m.total+'"></i></span>'+
+      '<span class="rval">'+m.total+'</span>';
+    bindTip(r,'<b>'+esc(m.verdict)+'</b><br>Role '+m.score.role+' · Form '+m.score.form+' · Doctrine '+m.score.doctrine+' · Mechanics '+m.score.mech);
+    r.addEventListener('click',function(){
+      state.race='all';state.q='';$('#q').value='';
+      $('#raceseg').querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed',x.dataset.r==='all')});
+      renderGrid();renderDetail(m);
+      $('#detail').scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'});
+    });
+    box.appendChild(r);
+  });
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){
+      box.querySelectorAll('.rfill').forEach(function(n,i){
+        setTimeout(function(){n.style.width=n.getAttribute('data-w')+'%'}, reduced?0:i*14);
+      }); io.disconnect();
+    }});
+  },{threshold:.08});
+  io.observe(box);
+})();
+
+/* ---------- facet scatter ---------- */
+(function(){
+  var box=$('#facets'),races=['terran','zerg','protoss'],
+      names={terran:'Terran',zerg:'Zerg',protoss:'Protoss'};
+  var W=300,H=210,pad={l:38,r:12,t:10,b:30};
+  var maxDur=Math.max.apply(null,DB.roster.map(function(d){return d.dur})),
+      maxSup=Math.max.apply(null,DB.roster.map(function(d){return d.sup}));
+  races.forEach(function(r){
+    var pts=DB.roster.filter(function(d){return d.race===r});
+    var f=el('div','facet');
+    var svg='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+names[r]+' units: supply cost against durability">';
+    [0,.25,.5,.75,1].forEach(function(k){
+      var y=pad.t+(H-pad.t-pad.b)*(1-k);
+      svg+='<line class="gl" x1="'+pad.l+'" y1="'+y+'" x2="'+(W-pad.r)+'" y2="'+y+'"/>'+
+           '<text class="atx" x="'+(pad.l-6)+'" y="'+(y+3)+'" text-anchor="end">'+Math.round(maxDur*k)+'</text>';
+    });
+    [0,2,4,6,8].forEach(function(s){
+      var x=pad.l+(W-pad.l-pad.r)*(s/maxSup);
+      svg+='<text class="atx" x="'+x+'" y="'+(H-pad.b+15)+'" text-anchor="middle">'+s+'</text>';
+    });
+    svg+='<line class="ax" x1="'+pad.l+'" y1="'+(H-pad.b)+'" x2="'+(W-pad.r)+'" y2="'+(H-pad.b)+'"/>';
+    svg+='<text class="atx" x="'+(pad.l+(W-pad.l-pad.r)/2)+'" y="'+(H-4)+'" text-anchor="middle">supply cost</text>';
+    pts.forEach(function(d){
+      var x=pad.l+(W-pad.l-pad.r)*(d.sup/maxSup),
+          y=pad.t+(H-pad.t-pad.b)*(1-d.dur/maxDur);
+      svg+='<circle class="dot" cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="4.5" fill="var(--'+r+')" '+
+           'stroke="var(--surf2)" stroke-width="2" data-n="'+esc(d.n)+'" data-d="'+d.dur+'" data-s="'+d.sup+'" data-p="'+d.cost+'"/>';
+    });
+    svg+='</svg>';
+    f.innerHTML='<div class="ftitle" style="color:var(--'+r+')">'+names[r]+'</div>'+svg+
+      '<div class="cnote" style="margin-top:6px">HP + shields (y) vs supply (x)</div>';
+    box.appendChild(f);
+    f.querySelectorAll('.dot').forEach(function(c){
+      bindTip(c,'<b>'+c.dataset.n+'</b><br>'+c.dataset.d+' effective HP<br>'+c.dataset.s+' supply · '+c.dataset.p+' resources');
+      c.addEventListener('mouseenter',function(){c.setAttribute('r','7')});
+      c.addEventListener('mouseleave',function(){c.setAttribute('r','4.5')});
+    });
+  });
+})();
+
+/* ---------- base-size strip ---------- */
+(function(){
+  var box=$('#strip'),data=DB.bases,W=920,H=132,pad={l:34,r:18,t:16,b:30};
+  var mx=Math.max.apply(null,data.map(function(d){return d.mm})),
+      mn=Math.min.apply(null,data.map(function(d){return d.mm}));
+  var svg='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Warhammer 40,000 datasheets arranged by base diameter">';
+  [25,40,60,80,100].forEach(function(v){
+    if(v>mx)return;
+    var x=pad.l+(W-pad.l-pad.r)*((v-mn)/(mx-mn));
+    svg+='<line class="gl" x1="'+x+'" y1="'+pad.t+'" x2="'+x+'" y2="'+(H-pad.b)+'"/>'+
+         '<text class="atx" x="'+x+'" y="'+(H-pad.b+15)+'" text-anchor="middle">'+v+'mm</text>';
+  });
+  svg+='<line class="ax" x1="'+pad.l+'" y1="'+(H-pad.b)+'" x2="'+(W-pad.r)+'" y2="'+(H-pad.b)+'"/>';
+  var lanes=[0,0,0,0,0];
+  data.forEach(function(d,i){
+    var x=pad.l+(W-pad.l-pad.r)*((d.mm-mn)/(mx-mn));
+    var lane=i%5, y=pad.t+8+lane*15;
+    var col = d.fac==='tyranids'?'var(--zerg)':(d.fac==='aeldari'||d.fac==='drukhari')?'var(--protoss)':'var(--m41)';
+    svg+='<circle class="dot" cx="'+x.toFixed(1)+'" cy="'+y+'" r="4" fill="'+col+'" stroke="var(--surf2)" stroke-width="2" '+
+         'data-n="'+esc(d.n)+'" data-m="'+d.mm+'" data-f="'+esc(d.fac)+'"/>';
+  });
+  svg+='</svg>';
+  box.innerHTML=svg+'<div class="legend" style="margin-top:4px">'+
+    '<div class="lg"><span class="sw" style="background:var(--m41)"></span>Imperium</div>'+
+    '<div class="lg"><span class="sw" style="background:var(--zerg)"></span>Tyranids</div>'+
+    '<div class="lg"><span class="sw" style="background:var(--protoss)"></span>Aeldari &amp; Drukhari</div></div>';
+  box.querySelectorAll('.dot').forEach(function(c){
+    bindTip(c,'<b>'+c.dataset.n+'</b><br>'+c.dataset.m+'mm base · '+c.dataset.f.replace(/-/g,' '));
+    c.addEventListener('mouseenter',function(){c.setAttribute('r','6.5')});
+    c.addEventListener('mouseleave',function(){c.setAttribute('r','4')});
+  });
+})();
+
+/* ---------- systems + orphans ---------- */
+(function(){
+  var g=$('#sysgrid');
+  DB.systems.forEach(function(s){
+    var c=el('div','sys');
+    c.innerHTML='<h3>'+esc(s.t)+'</h3>'+
+      '<div class="sysrow"><span class="tag k">StarCraft</span><span>'+esc(s.sc)+'</span></div>'+
+      '<div class="sysrow"><span class="tag m">40K</span><span>'+esc(s.wh)+'</span></div>'+
+      '<div class="sysnote">'+esc(s.note)+'</div>';
+    g.appendChild(c);
+  });
+  var o=$('#orph');
+  DB.orphans.forEach(function(x){
+    var c=el('div','orphcard');
+    c.innerHTML='<h4>'+esc(x.n)+'</h4><div class="f">'+esc(x.s)+'</div><p>'+esc(x.w)+'</p>';
+    o.appendChild(c);
+  });
+})();
+
+/* ---------- boot ---------- */
+renderGrid();
+renderDetail(M[1]);
+})();
+</script>
